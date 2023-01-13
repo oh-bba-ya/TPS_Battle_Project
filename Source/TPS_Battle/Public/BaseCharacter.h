@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputActionValue.h"
 #include "BaseCharacter.generated.h"
 
 UCLASS()
@@ -26,7 +27,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USpringArmComponent* springComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UCameraComponent* baseCamComp;
+
+
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UInputAction* ia_BaseHorizontal;
 	
@@ -39,8 +46,21 @@ public:
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UInputAction* ia_BaseJump;
 
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputMappingContext* imc_BaseMapping;
 
 private:
+
+	void Base_Horizaontal(const FInputActionValue& value);
+	void Base_Vertical(const FInputActionValue& value);
+	void Base_Jump();
+	void Base_Attack();
+
+	void Turn(float value);
+	void LookUp(float value);
+
+	FVector direction;
+
 
 
 
