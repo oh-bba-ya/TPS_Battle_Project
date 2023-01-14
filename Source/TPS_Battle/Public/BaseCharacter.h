@@ -34,6 +34,7 @@ public:
 		class UCameraComponent* baseCamComp;
 
 
+
 #pragma region Enhanced Input
 	// Enhanced Input
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
@@ -57,8 +58,13 @@ public:
 		TSubclassOf<class UWidgetPlayer> BP_WidgetPlayer;
 
 
-	
+	float GetPlayerHP();
+	void SetPlayerHP(float value);
 
+	float GetPlayerMP();
+	void SetPlayerMP(float value);
+	
+	void OnHitEvent(float value);
 
 
 private:
@@ -97,6 +103,10 @@ private:
 	void InputJump();
 	void InputEnableSprint();
 	void InputDisableSprint();
+	void InputPickUp();
+
+
+
 
 
 	void SetDirectionMovement(float deltaTime);

@@ -7,7 +7,6 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WidgetPlayer.h"
 
@@ -19,6 +18,7 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationYaw = true;
+
 
 	springComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringComp"));
 	springComp->SetupAttachment(RootComponent);
@@ -33,7 +33,6 @@ ABaseCharacter::ABaseCharacter()
 	baseCamComp->bUsePawnControlRotation = false;
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));
-
 	
 
 	APlayerController* playerCon = Cast<APlayerController>(GetController());
@@ -103,6 +102,39 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+float ABaseCharacter::GetPlayerHP()
+{
+	return basePlayerHP;
+}
+
+void ABaseCharacter::SetPlayerHP(float value)
+{
+	basePlayerHP = value;
+}
+
+float ABaseCharacter::GetPlayerMP()
+{
+	return basePlayerMP;
+}
+
+void ABaseCharacter::SetPlayerMP(float value)
+{
+	basePlayerMP = value;
+}
+
+void ABaseCharacter::OnHitEvent(float value)
+{
+	if (basePlayerHP > 0) {
+		basePlayerHP -= value;
+		if (widgetPlayer != nullptr) {
+			widgetPlayer->PrintState(basePlayerHP, 100, true);
+		}
+		if (basePlayerHP <= 0) {
+			Destroy();
+		}
+	}
+}
+
 void ABaseCharacter::Base_Horizaontal(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Input"));
@@ -159,6 +191,11 @@ void ABaseCharacter::InputEnableSprint()
 void ABaseCharacter::InputDisableSprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+}
+
+void ABaseCharacter::InputPickUp()
+{
+
 }
 
 void ABaseCharacter::SetDirectionMovement(float deltaTime)
