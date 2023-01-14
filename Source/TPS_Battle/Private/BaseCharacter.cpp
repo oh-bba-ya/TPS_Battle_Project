@@ -4,10 +4,11 @@
 #include "BaseCharacter.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputSubsystems.h"
-#include "..\Public\BaseCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values
@@ -15,6 +16,8 @@ ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	bUseControllerRotationYaw = true;
 
 	springComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringComp"));
 	springComp->SetupAttachment(RootComponent);
@@ -28,7 +31,9 @@ ABaseCharacter::ABaseCharacter()
 	baseCamComp->SetupAttachment(springComp);
 	baseCamComp->bUsePawnControlRotation = false;
 
-	bUseControllerRotationYaw = true;
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));
+
+	
 
 	APlayerController* playerCon = Cast<APlayerController>(GetController());
 
@@ -39,6 +44,7 @@ ABaseCharacter::ABaseCharacter()
 			subsys->AddMappingContext(imc_BaseMapping, 0);
 		}
 	}
+
 
 }
 
@@ -55,6 +61,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	SetDirectionMovement(DeltaTime);
+
 }
 
 // Called to bind functionality to input
@@ -65,8 +73,15 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this ,&ABaseCharacter::Turn);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this ,&ABaseCharacter::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &ABaseCharacter::InputHorizontal);
+	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ABaseCharacter::InputVertical);
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::InputJump);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ABaseCharacter::InputEnableSprint);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ABaseCharacter::InputDisableSprint);
+
 
 	/*
+	* Enhanced Input
 	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
 	enhancedInputComponent->BindAction(ia_BaseHorizontal, ETriggerEvent::Triggered, this, &ABaseCharacter::Base_Horizaontal);
@@ -110,6 +125,38 @@ void ABaseCharacter::Turn(float value)
 void ABaseCharacter::LookUp(float value)
 {
 	AddControllerPitchInput(value);
+}
+
+void ABaseCharacter::InputHorizontal(float value)
+{
+	direction.Y = value;
+}
+
+void ABaseCharacter::InputVertical(float value)
+{
+	direction.X = value;
+}
+
+void ABaseCharacter::InputJump()
+{
+	Jump();
+}
+
+void ABaseCharacter::InputEnableSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = sprintSpeed;
+
+}
+void ABaseCharacter::InputDisableSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+}
+
+void ABaseCharacter::SetDirectionMovement(float deltaTime)
+{
+	direction = FTransform(GetControlRotation()).TransformVector(direction);
+	AddMovementInput(direction);
+	direction = FVector::ZeroVector;
 }
 
 

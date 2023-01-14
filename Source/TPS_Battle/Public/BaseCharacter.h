@@ -34,6 +34,8 @@ public:
 		class UCameraComponent* baseCamComp;
 
 
+#pragma region Enhanced Input
+	// Enhanced Input
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UInputAction* ia_BaseHorizontal;
 	
@@ -48,18 +50,43 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
 		class UInputMappingContext* imc_BaseMapping;
+#pragma endregion
+
+
+
 
 private:
 
+#pragma region Enhanced Input
+	// Enhanced Input
 	void Base_Horizaontal(const FInputActionValue& value);
 	void Base_Vertical(const FInputActionValue& value);
 	void Base_Jump();
 	void Base_Attack();
+#pragma endregion
+
 
 	void Turn(float value);
 	void LookUp(float value);
 
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		float walkSpeed = 600;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		float sprintSpeed = 1000;
+
+
 	FVector direction;
+
+	void InputHorizontal(float value);
+	void InputVertical(float value);
+	void InputJump();
+	void InputEnableSprint();
+	void InputDisableSprint();
+
+
+	void SetDirectionMovement(float deltaTime);
 
 
 
