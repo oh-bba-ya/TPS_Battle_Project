@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "WidgetPlayer.h"
 
 
 // Sets default values
@@ -53,6 +54,14 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (BP_WidgetPlayer != nullptr) {
+		widgetPlayer = CreateWidget<UWidgetPlayer>(GetWorld(), BP_WidgetPlayer);
+		if (widgetPlayer != nullptr) {
+			widgetPlayer->AddToViewport();
+			widgetPlayer->PrintState(basePlayerHP, 100, true);
+		}
+	}
 	
 }
 

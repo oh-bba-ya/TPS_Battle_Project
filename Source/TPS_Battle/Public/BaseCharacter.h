@@ -53,9 +53,22 @@ public:
 #pragma endregion
 
 
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		TSubclassOf<class UWidgetPlayer> BP_WidgetPlayer;
+
+
+	
+
 
 
 private:
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		float basePlayerHP = 100;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		float basePlayerMP = 100;
+
+
 
 #pragma region Enhanced Input
 	// Enhanced Input
@@ -87,6 +100,8 @@ private:
 
 
 	void SetDirectionMovement(float deltaTime);
+
+	class UWidgetPlayer* widgetPlayer;
 
 
 
