@@ -16,6 +16,7 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -66,6 +67,7 @@ private:
 	void InputEnableSprint();
 	void InputDisableSprint();
 	void InputPickUp();
+	void InputAttack();
 #pragma endregion
 
 	void SetDirectionMovement(float deltaTime);

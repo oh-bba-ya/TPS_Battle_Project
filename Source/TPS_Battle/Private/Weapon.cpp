@@ -8,7 +8,8 @@
 
 // Sets default values
 AWeapon::AWeapon() :
-	WeaponState(EWeaponState::EWS_PickUp)
+	WeaponState(EWeaponState::EWS_PickUp),
+	WeaponName(EWeaponName::EWN_Base)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -61,6 +62,18 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		baseCharacter->SetOverlapWeapon(nullptr);
 		SetVisibilityWIdget(false);
 	}
+}
+
+void AWeapon::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+	/*
+	if (WeaponName == EWeaponName::EWN_Base) {
+		FTransform t = WeaponMesh->GetSocketTransform(TEXT("FirePosition"));
+
+		GetWorld()->SpawnActor<AProjectile>(BulletFactory, t);
+	}
+	*/
 }
 
 // Called every frame

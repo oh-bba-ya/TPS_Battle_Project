@@ -12,7 +12,6 @@
 #include "Weapon.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/SphereComponent.h"
-#include "Components/ProgressBar.h"
 
 
 // Sets default values
@@ -94,6 +93,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ABaseCharacter::InputEnableSprint);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ABaseCharacter::InputDisableSprint);
 	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Released, this, &ABaseCharacter::InputPickUp);
+	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Released, this, &ABaseCharacter::InputAttack);
 
 
 	/*
@@ -116,7 +116,6 @@ void ABaseCharacter::OnHitEvent(float value)
 {
 	if (basePlayerHP > 0) {
 		basePlayerHP -= value;
-		UE_LOG(LogTemp, Warning, TEXT("Player Hit : %f"),basePlayerHP);
 		if (widgetPlayer != nullptr) {
 			widgetPlayer->PrintState(basePlayerHP, 100, true);
 		}
@@ -200,6 +199,13 @@ void ABaseCharacter::InputPickUp()
 	}
 }
 
+void ABaseCharacter::InputAttack()
+{
+	if (EquippedWeapon != nullptr && EquippedWeapon->GetWeaponState() == EWeaponState::EWS_Equipped) {
+		EquippedWeapon->Fire();
+	}
+}
+
 void ABaseCharacter::SetDirectionMovement(float deltaTime)
 {
 	direction = FTransform(GetControlRotation()).TransformVector(direction);
@@ -226,7 +232,9 @@ void ABaseCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 		if (HandSocket != nullptr) {
 			HandSocket->AttachActor(WeaponToEquip, GetMesh());
 		}
+		
 		EquippedWeapon = WeaponToEquip;
+		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
 	}
 }
 

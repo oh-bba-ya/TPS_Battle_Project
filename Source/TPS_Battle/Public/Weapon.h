@@ -18,6 +18,16 @@ enum class EWeaponState : uint8 {
 	EWS_MAX UMETA(DisPlayNmae = "DefaultMAX")
 };
 
+UENUM(BlueprintType)
+enum class EWeaponName : uint8 {
+	EWN_Base UMETA(DisPlayNmae = "Base"),
+	EWN_Pistol UMETA(DisPlayNmae = "Pistol"),
+	EWN_SubMachineGun UMETA(DisPlayNmae = "SubMachineGun"),
+	EWN_ShotGun UMETA(DisPlayNmae = "ShotGun"),
+	EWN_SniperGun UMETA(DisPlayNmae = "SniperGun"),
+	EWN_RocketGun UMETA(DisPlayNmae = "RocketGun"),
+};
+
 UCLASS()
 class TPS_BATTLE_API AWeapon : public AActor
 {
@@ -38,7 +48,6 @@ protected:
 		void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 
-
 private:
 	UPROPERTY(EditAnywhere , Category = WeaponProperties)
 	class USkeletalMeshComponent* WeaponMesh;
@@ -53,8 +62,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
 	EWeaponState WeaponState;
 
+	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
+		EWeaponName WeaponName;
+
+
 
 public:
+	//UPROPERTY(EditAnywhere, Category = WeaponProperties)
+		//TSubclassOf<class AProjectile> BulletFactory;
+
 
 	UFUNCTION()
 		void SetVisibilityWIdget(bool overlap);
@@ -62,4 +78,10 @@ public:
 	FORCEINLINE EWeaponState GetWeaponState() const { return WeaponState; }
 	FORCEINLINE void SetWeaponState(EWeaponState State) { WeaponState = State; }
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
+
+	FORCEINLINE EWeaponName GetWeaponName() const { return WeaponName; }
+	FORCEINLINE void SetWeaponName(EWeaponName Name) { WeaponName = Name; }
+
+	UFUNCTION()
+		virtual void Fire();
 };
