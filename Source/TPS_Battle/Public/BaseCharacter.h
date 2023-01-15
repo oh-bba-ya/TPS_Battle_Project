@@ -128,7 +128,7 @@ public:
 	FORCEINLINE void SetOverlapWeapon(AWeapon* weapon) { OverlapWeapon = weapon; }
 
 	
-	void OnHitEvent(float value);
+	void OnHitEvent(float value = 10);
 
 	
 

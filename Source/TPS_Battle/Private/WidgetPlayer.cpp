@@ -7,9 +7,9 @@
 void UWidgetPlayer::PrintState(float current, float max, bool hp)
 {
 	if (hp) {
-		hpBar->SetPercent(current / max * 100);
+		hpBar->SetPercent(current / max);
 	}
 	else {
-		mpBar->SetPercent(current / max * 100);
+		mpBar->SetPercent(current / max );
 	}
 }

@@ -12,6 +12,7 @@
 #include "Weapon.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/SphereComponent.h"
+#include "Components/ProgressBar.h"
 
 
 // Sets default values
@@ -62,6 +63,7 @@ void ABaseCharacter::BeginPlay()
 		if (widgetPlayer != nullptr) {
 			widgetPlayer->AddToViewport();
 			widgetPlayer->PrintState(basePlayerHP, 100, true);
+			widgetPlayer->PrintState(basePlayerMP, 100, false);
 		}
 	}
 	EquipWeapon(SpawnDefaultWeapon());
@@ -114,12 +116,16 @@ void ABaseCharacter::OnHitEvent(float value)
 {
 	if (basePlayerHP > 0) {
 		basePlayerHP -= value;
+		UE_LOG(LogTemp, Warning, TEXT("Player Hit : %f"),basePlayerHP);
 		if (widgetPlayer != nullptr) {
 			widgetPlayer->PrintState(basePlayerHP, 100, true);
 		}
 		if (basePlayerHP <= 0) {
-			Destroy();
+			UE_LOG(LogTemp, Warning, TEXT("Player Die"));
 		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Player Die"));
 	}
 }
 
