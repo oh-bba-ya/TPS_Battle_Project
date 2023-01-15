@@ -20,7 +20,66 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+
+private:
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		float basePlayerHP = 100;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		float basePlayerMP = 100;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class AWeapon* EquippedWeapon;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		AWeapon* OverlapWeapon;
+
+
+#pragma region Enhanced Input
+	/*
+	// Enhanced Input
+	void Base_Horizaontal(const FInputActionValue& value);
+	void Base_Vertical(const FInputActionValue& value);
+	void Base_Jump();
+	void Base_Attack();
+	*/
+#pragma endregion
+
+
+	void Turn(float value);
+	void LookUp(float value);
+
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		float walkSpeed = 600;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		float sprintSpeed = 1000;
+
+
+	FVector direction;
+
+#pragma region Input
+	void InputHorizontal(float value);
+	void InputVertical(float value);
+	void InputJump();
+	void InputEnableSprint();
+	void InputDisableSprint();
+	void InputPickUp();
+#pragma endregion
+
+	void SetDirectionMovement(float deltaTime);
+
+	class UWidgetPlayer* widgetPlayer;
+
+	class AWeapon* SpawnDefaultWeapon();
+
+	void EquipWeapon(AWeapon* WeaponToEquip);
+
+
+
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -33,13 +92,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UCameraComponent* baseCamComp;
 
+	
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		TSubclassOf<AWeapon> DefaultWeaponClass;
 
 
 #pragma region Enhanced Input
 	// Enhanced Input
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UInputAction* ia_BaseHorizontal;
-	
+
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UInputAction* ia_BaseVertical;
 
@@ -58,62 +120,17 @@ public:
 		TSubclassOf<class UWidgetPlayer> BP_WidgetPlayer;
 
 
-	float GetPlayerHP();
-	void SetPlayerHP(float value);
+	FORCEINLINE float GetPlayerHP() const {return basePlayerHP; }
+	FORCEINLINE void SetPlayerHP(float value) { basePlayerHP = value; }
+	FORCEINLINE float GetPlayerMP() const{ return basePlayerMP; }
+	FORCEINLINE void SetPlayerMP(float value) { basePlayerMP = value; }
+	FORCEINLINE AWeapon* GetOverlapWeapon() const { return OverlapWeapon; }
+	FORCEINLINE void SetOverlapWeapon(AWeapon* weapon) { OverlapWeapon = weapon; }
 
-	float GetPlayerMP();
-	void SetPlayerMP(float value);
 	
 	void OnHitEvent(float value);
 
-
-private:
-	UPROPERTY(EditAnywhere, Category = PlayerSettings)
-		float basePlayerHP = 100;
-
-	UPROPERTY(EditAnywhere, Category = PlayerSettings)
-		float basePlayerMP = 100;
-
-
-
-#pragma region Enhanced Input
-	// Enhanced Input
-	void Base_Horizaontal(const FInputActionValue& value);
-	void Base_Vertical(const FInputActionValue& value);
-	void Base_Jump();
-	void Base_Attack();
-#pragma endregion
-
-
-	void Turn(float value);
-	void LookUp(float value);
-
-
-	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
-		float walkSpeed = 600;
-
-	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
-		float sprintSpeed = 1000;
-
-
-	FVector direction;
-
-	void InputHorizontal(float value);
-	void InputVertical(float value);
-	void InputJump();
-	void InputEnableSprint();
-	void InputDisableSprint();
-	void InputPickUp();
-
-
-
-
-
-	void SetDirectionMovement(float deltaTime);
-
-	class UWidgetPlayer* widgetPlayer;
-
-
+	
 
 
 

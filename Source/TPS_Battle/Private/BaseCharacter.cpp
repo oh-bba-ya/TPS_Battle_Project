@@ -9,6 +9,9 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WidgetPlayer.h"
+#include "Weapon.h"
+#include "Engine/SkeletalMeshSocket.h"
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
@@ -61,6 +64,7 @@ void ABaseCharacter::BeginPlay()
 			widgetPlayer->PrintState(basePlayerHP, 100, true);
 		}
 	}
+	EquipWeapon(SpawnDefaultWeapon());
 	
 }
 
@@ -83,9 +87,11 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this ,&ABaseCharacter::LookUp);
 	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &ABaseCharacter::InputHorizontal);
 	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ABaseCharacter::InputVertical);
+	
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::InputJump);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ABaseCharacter::InputEnableSprint);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ABaseCharacter::InputDisableSprint);
+	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Released, this, &ABaseCharacter::InputPickUp);
 
 
 	/*
@@ -102,25 +108,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
-float ABaseCharacter::GetPlayerHP()
-{
-	return basePlayerHP;
-}
 
-void ABaseCharacter::SetPlayerHP(float value)
-{
-	basePlayerHP = value;
-}
-
-float ABaseCharacter::GetPlayerMP()
-{
-	return basePlayerMP;
-}
-
-void ABaseCharacter::SetPlayerMP(float value)
-{
-	basePlayerMP = value;
-}
 
 void ABaseCharacter::OnHitEvent(float value)
 {
@@ -135,6 +123,8 @@ void ABaseCharacter::OnHitEvent(float value)
 	}
 }
 
+#pragma region EnhancedInput 
+/* Enhanced Input
 void ABaseCharacter::Base_Horizaontal(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Input"));
@@ -156,7 +146,10 @@ void ABaseCharacter::Base_Jump()
 
 void ABaseCharacter::Base_Attack()
 {
+
 }
+*/
+#pragma endregion
 
 void ABaseCharacter::Turn(float value)
 {
@@ -195,7 +188,10 @@ void ABaseCharacter::InputDisableSprint()
 
 void ABaseCharacter::InputPickUp()
 {
-
+	if (OverlapWeapon != nullptr) {
+		EquipWeapon(OverlapWeapon);
+		OverlapWeapon = nullptr;
+	}
 }
 
 void ABaseCharacter::SetDirectionMovement(float deltaTime)
@@ -203,6 +199,29 @@ void ABaseCharacter::SetDirectionMovement(float deltaTime)
 	direction = FTransform(GetControlRotation()).TransformVector(direction);
 	AddMovementInput(direction);
 	direction = FVector::ZeroVector;
+}
+
+AWeapon* ABaseCharacter::SpawnDefaultWeapon()
+{
+	if (DefaultWeaponClass != NULL) {
+		return GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
+	}
+
+	return nullptr;
+}
+
+void ABaseCharacter::EquipWeapon(AWeapon* WeaponToEquip)
+{
+	if (WeaponToEquip != nullptr) {
+
+		WeaponToEquip->GetAreaSphere()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+		if (HandSocket != nullptr) {
+			HandSocket->AttachActor(WeaponToEquip, GetMesh());
+		}
+		EquippedWeapon = WeaponToEquip;
+	}
 }
 
 

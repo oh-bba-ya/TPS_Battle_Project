@@ -7,7 +7,8 @@
 #include "BaseCharacter.h"
 
 // Sets default values
-AWeapon::AWeapon()
+AWeapon::AWeapon() :
+	WeaponState(EWeaponState::EWS_PickUp)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -36,9 +37,9 @@ void AWeapon::BeginPlay()
 	AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	AreaSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnSphereOverlap);
+	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AWeapon::OnSphereEndOverlap);
 
 	if (PickupWidget != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Not NULL"));
 		PickupWidget->SetVisibility(false);
 	}
 
@@ -47,8 +48,18 @@ void AWeapon::BeginPlay()
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseCharacter* baseCharacter = Cast<ABaseCharacter>(OtherActor);
-	if (baseCharacter != nullptr && PickupWidget != nullptr) {
-		PickupWidget->SetVisibility(true);
+	if (baseCharacter != nullptr) {
+		baseCharacter->SetOverlapWeapon(this);
+		SetVisibilityWIdget(true);
+	}
+}
+
+void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ABaseCharacter* baseCharacter = Cast<ABaseCharacter>(OtherActor);
+	if (baseCharacter != nullptr) {
+		baseCharacter->SetOverlapWeapon(nullptr);
+		SetVisibilityWIdget(false);
 	}
 }
 
@@ -56,6 +67,14 @@ void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void AWeapon::SetVisibilityWIdget(bool overlap)
+{
+	if (PickupWidget != nullptr) {
+		PickupWidget->SetVisibility(overlap);
+	}
 
 }
 
