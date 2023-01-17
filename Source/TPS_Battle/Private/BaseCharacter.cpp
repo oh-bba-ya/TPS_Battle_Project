@@ -13,6 +13,7 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/SphereComponent.h"
 #include "..\Public\BaseCharacter.h"
+#include "BaseCharacterAnimInstance.h"
 
 
 // Sets default values
@@ -67,6 +68,8 @@ void ABaseCharacter::BeginPlay()
 		}
 	}
 	EquipWeapon(SpawnDefaultWeapon());
+
+	anim = Cast<UBaseCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	
 }
 
@@ -208,6 +211,9 @@ void ABaseCharacter::InputAttack()
 {
 	if (EquippedWeapon != nullptr && EquippedWeapon->GetWeaponState() == EWeaponState::EWS_Equipped) {
 		EquippedWeapon->Fire();
+		if (anim != nullptr) {
+			anim->PlayAttackAnim();
+		}
 	}
 }
 

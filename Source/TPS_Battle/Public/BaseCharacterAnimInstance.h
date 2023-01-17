@@ -22,11 +22,19 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
 		bool isInAir = false;
 
+	// 애니메이션 몽타주
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
+		class UAnimMontage* attackPistolAnimMontage;
+
+	void PlayAttackAnim();
+
 	// 플레이어 좌우 이동속도
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
 		float direction = 0;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+
 
 
 };

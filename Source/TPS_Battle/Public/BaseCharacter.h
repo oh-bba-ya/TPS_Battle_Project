@@ -39,7 +39,7 @@ private:
 		class AWeapon* PickuppedWeapon;
 
 
-
+	class UBaseCharacterAnimInstance* anim;
 
 #pragma region Enhanced Input
 	/*

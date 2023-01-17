@@ -5,6 +5,11 @@
 #include "BaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+void UBaseCharacterAnimInstance::PlayAttackAnim()
+{
+	Montage_Play(attackPistolAnimMontage);
+}
+
 void UBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
