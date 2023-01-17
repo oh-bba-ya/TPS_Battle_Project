@@ -13,5 +13,8 @@ UCLASS()
 class TPS_BATTLE_API AWeaponChildPistol : public AWeapon
 {
 	GENERATED_BODY()
+
+public:
+
 	
 };

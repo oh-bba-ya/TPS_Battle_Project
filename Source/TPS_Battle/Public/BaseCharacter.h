@@ -29,11 +29,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		float basePlayerMP = 100;
 
-	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
 		class AWeapon* EquippedWeapon;
 
-	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
 		AWeapon* OverlapWeapon;
+
+	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
+		class AWeapon* PickuppedWeapon;
 
 
 #pragma region Enhanced Input
@@ -77,6 +80,8 @@ private:
 	class AWeapon* SpawnDefaultWeapon();
 
 	void EquipWeapon(AWeapon* WeaponToEquip);
+
+	void PickupWeapon(AWeapon* WeaponToPickup);
 
 
 
@@ -123,9 +128,9 @@ public:
 
 
 	FORCEINLINE float GetPlayerHP() const {return basePlayerHP; }
-	FORCEINLINE void SetPlayerHP(float value) { basePlayerHP = value; }
+	FORCEINLINE void SetPlayerHP(float value) { basePlayerHP = (value > 0 ? value : 0); }
 	FORCEINLINE float GetPlayerMP() const{ return basePlayerMP; }
-	FORCEINLINE void SetPlayerMP(float value) { basePlayerMP = value; }
+	FORCEINLINE void SetPlayerMP(float value) { basePlayerMP = (value > 0 ? value : 0); }
 	FORCEINLINE AWeapon* GetOverlapWeapon() const { return OverlapWeapon; }
 	FORCEINLINE void SetOverlapWeapon(AWeapon* weapon) { OverlapWeapon = weapon; }
 

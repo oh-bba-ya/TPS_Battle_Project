@@ -12,6 +12,7 @@
 #include "Weapon.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/SphereComponent.h"
+#include "..\Public\BaseCharacter.h"
 
 
 // Sets default values
@@ -90,10 +91,12 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ABaseCharacter::InputVertical);
 	
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::InputJump);
+	
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ABaseCharacter::InputEnableSprint);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ABaseCharacter::InputDisableSprint);
-	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Released, this, &ABaseCharacter::InputPickUp);
-	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Released, this, &ABaseCharacter::InputAttack);
+
+	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Pressed, this, &ABaseCharacter::InputPickUp);
+	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ABaseCharacter::InputAttack);
 
 
 	/*
@@ -194,7 +197,7 @@ void ABaseCharacter::InputDisableSprint()
 void ABaseCharacter::InputPickUp()
 {
 	if (OverlapWeapon != nullptr) {
-		EquipWeapon(OverlapWeapon);
+		PickupWeapon(OverlapWeapon);
 		OverlapWeapon = nullptr;
 	}
 }
@@ -235,6 +238,22 @@ void ABaseCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 		
 		EquippedWeapon = WeaponToEquip;
 		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		PickupWeapon(EquippedWeapon);
+	}
+}
+
+void ABaseCharacter::PickupWeapon(AWeapon* WeaponToPickup)
+{
+	if (WeaponToPickup != nullptr) {
+		WeaponToPickup->GetAreaSphere()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+		const USkeletalMeshSocket* bagSocket = GetMesh()->GetSocketByName(FName("SpineBagSocket"));
+
+		if (bagSocket) {
+			bagSocket->AttachActor(WeaponToPickup, GetMesh());
+		}
+		PickuppedWeapon = WeaponToPickup;
+		PickuppedWeapon->SetWeaponState(EWeaponState::EWS_PickUpped);
 	}
 }
 

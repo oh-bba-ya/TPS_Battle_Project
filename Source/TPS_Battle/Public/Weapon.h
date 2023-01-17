@@ -65,6 +65,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
 		EWeaponName WeaponName;
 
+	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
+		float damage = 1;
+
 
 
 public:
@@ -81,6 +84,8 @@ public:
 
 	FORCEINLINE EWeaponName GetWeaponName() const { return WeaponName; }
 	FORCEINLINE void SetWeaponName(EWeaponName Name) { WeaponName = Name; }
+
+	//Damage getset ¸¸µé±â
 
 	UFUNCTION()
 		virtual void Fire();
