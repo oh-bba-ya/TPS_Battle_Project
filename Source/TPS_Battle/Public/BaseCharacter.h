@@ -39,6 +39,8 @@ private:
 		class AWeapon* PickuppedWeapon;
 
 
+
+
 #pragma region Enhanced Input
 	/*
 	// Enhanced Input
@@ -71,6 +73,10 @@ private:
 	void InputDisableSprint();
 	void InputPickUp();
 	void InputAttack();
+	void InputEquipWeapon();
+
+	int32 WeaponNumber = 0;
+	int32 MaxCountWeapon = 2;
 #pragma endregion
 
 	void SetDirectionMovement(float deltaTime);
@@ -133,8 +139,9 @@ public:
 	FORCEINLINE void SetPlayerMP(float value) { basePlayerMP = (value > 0 ? value : 0); }
 	FORCEINLINE AWeapon* GetOverlapWeapon() const { return OverlapWeapon; }
 	FORCEINLINE void SetOverlapWeapon(AWeapon* weapon) { OverlapWeapon = weapon; }
-
-	
+	FORCEINLINE void SetMaxCountWeapon(int32 count) { MaxCountWeapon = count > 0 ? count : 1; }
+	FORCEINLINE int32 GetMaxCountweapon() { return MaxCountWeapon; }
+	FORCEINLINE UCameraComponent* GetCamComponent() const { return baseCamComp; }
 	void OnHitEvent(float value = 10);
 
 	

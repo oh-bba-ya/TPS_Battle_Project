@@ -28,6 +28,7 @@ AWeapon::AWeapon() :
 
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PickupWidget"));
 	PickupWidget->SetupAttachment(RootComponent);
+
 }
 
 // Called when the game starts or when spawned
@@ -66,7 +67,7 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 
 void AWeapon::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+	UE_LOG(LogTemp, Warning, TEXT("Base Weapon Fire"));
 	/*
 	if (WeaponName == EWeaponName::EWN_Base) {
 		FTransform t = WeaponMesh->GetSocketTransform(TEXT("FirePosition"));

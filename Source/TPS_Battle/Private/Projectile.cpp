@@ -26,16 +26,14 @@ AProjectile::AProjectile()
 
 	meshComp->SetRelativeScale3D(FVector(0.25, 0.25, 0.25));
 	meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//meshComp->SetCollisionProfileName(TEXT("NoCollision"));
 
 
 	movementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
 
 	movementComp->SetUpdatedComponent(sphereComp);
-	movementComp->InitialSpeed = 5000;
-	movementComp->MaxSpeed = 5000;
-	movementComp->bShouldBounce = true;
-	movementComp->Bounciness = 0.5f;
+	movementComp->InitialSpeed = Speed;
+	movementComp->MaxSpeed = Speed;
+	movementComp->bShouldBounce = false;
 
 }
 
@@ -43,7 +41,10 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	sphereComp->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBulletOverlap);
+
+	DestoryTimeBullet();
 }
 
 // Called every frame
@@ -51,5 +52,20 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AProjectile::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void AProjectile::DestoryBullet()
+{
+	Destroy();
+}
+
+void AProjectile::DestoryTimeBullet()
+{
+	FTimerHandle destoryTime;
+	GetWorld()->GetTimerManager().SetTimer(destoryTime, this, &AProjectile::DestoryBullet, destroyBulletTime, false);
 }
 

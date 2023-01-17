@@ -15,6 +15,19 @@ class TPS_BATTLE_API AWeaponChildPistol : public AWeapon
 	GENERATED_BODY()
 
 public:
+	AWeaponChildPistol();
+
+
+protected:
+	virtual void BeginPlay() override;
+	
+
+	void Fire() override;
 
 	
+	 
+public:
+	class ABaseCharacter* player;
+
+
 };

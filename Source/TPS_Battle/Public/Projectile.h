@@ -33,4 +33,21 @@ public:
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		class UProjectileMovementComponent* movementComp;
 
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		int32 Speed = 2000;
+
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		float destroyBulletTime = 2.0f;
+
+	UFUNCTION()
+		void OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	void DestoryBullet();
+
+	void DestoryTimeBullet();
+
+
+
+
+
 };

@@ -70,10 +70,13 @@ private:
 
 
 
+
+
 public:
 	//UPROPERTY(EditAnywhere, Category = WeaponProperties)
 		//TSubclassOf<class AProjectile> BulletFactory;
-
+	UPROPERTY(EditAnywhere, Category = WeaponProperties)
+		TSubclassOf<class AProjectile> bulletFactory;
 
 	UFUNCTION()
 		void SetVisibilityWIdget(bool overlap);
@@ -86,7 +89,11 @@ public:
 	FORCEINLINE void SetWeaponName(EWeaponName Name) { WeaponName = Name; }
 
 	//Damage getset ¸¸µé±â
+	FORCEINLINE float GetDamage() const { return damage; }
+	FORCEINLINE void SetDamage(float d) { damage = d > 0 ? d : 1; }
+	FORCEINLINE  USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
 	UFUNCTION()
 		virtual void Fire();
+
 };

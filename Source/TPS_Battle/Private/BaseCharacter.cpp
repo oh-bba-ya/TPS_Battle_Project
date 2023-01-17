@@ -97,6 +97,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Pressed, this, &ABaseCharacter::InputPickUp);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ABaseCharacter::InputAttack);
+	
+	PlayerInputComponent->BindAction(TEXT("UpEquipWeapon"), IE_Pressed, this, &ABaseCharacter::InputEquipWeapon);
 
 
 	/*
@@ -209,6 +211,13 @@ void ABaseCharacter::InputAttack()
 	}
 }
 
+void ABaseCharacter::InputEquipWeapon()
+{
+	WeaponNumber = WeaponNumber % GetMaxCountweapon();
+	UE_LOG(LogTemp, Warning, TEXT("Change To Weapon : %d"),WeaponNumber);
+	WeaponNumber += 1;
+}
+
 void ABaseCharacter::SetDirectionMovement(float deltaTime)
 {
 	direction = FTransform(GetControlRotation()).TransformVector(direction);
@@ -238,7 +247,6 @@ void ABaseCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 		
 		EquippedWeapon = WeaponToEquip;
 		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
-		PickupWeapon(EquippedWeapon);
 	}
 }
 
