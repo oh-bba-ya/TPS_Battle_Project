@@ -66,5 +66,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
 	float dieSpeed = 50.0f;
+
+	UPROPERTY()
+	class UBaseEnemyAnim* anim;
+	UPROPERTY()
+	class AAIController* ai;
+
+	FVector randomPos;
+	bool GetRandomPositionInNavMesh(FVector centerLocation, float radius, FVector& dest);
 };
 

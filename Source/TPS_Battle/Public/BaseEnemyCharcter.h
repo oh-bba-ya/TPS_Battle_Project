@@ -27,7 +27,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	//class UCapsuleComponent* capsuleComp;
-	//class UStaticMeshComponent* meshComp;
+	//class UStaticMeshComponent* MeshComp;
 	//class USceneComponent* sceneComp;
 
 	int32 GetEnemyHP();
@@ -35,6 +35,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSMComponent)
 	class UBaseEnemyCharacterFSM* fsm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GunMesh)
+	class USkeletalMeshComponent* pistolMeshComp;
 
 private:
 	int32 enemyHP = 100;

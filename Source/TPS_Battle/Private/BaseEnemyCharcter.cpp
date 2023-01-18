@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "BaseEnemyCharacterFSM.h"
 
 // Sets default values
@@ -36,6 +37,16 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 	if (tempClass.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(tempClass.Class);
+	}
+
+	pistolMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh"));
+	pistolMeshComp->SetupAttachment(GetMesh(), TEXT("RightHandSocket"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempGunMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Resources/Weapon/MilitaryWeapSilver/Weapons/Pistols_A.Pistols_A''"));
+	if(tempGunMesh.Succeeded())
+	{		
+		pistolMeshComp->SetSkeletalMesh(tempGunMesh.Object);
+		pistolMeshComp->SetRelativeLocation(FVector(-42, 7, 1));
+		pistolMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
 }
 
