@@ -101,7 +101,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Pressed, this, &ABaseCharacter::InputPickUp);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ABaseCharacter::InputAttack);
 	
-	PlayerInputComponent->BindAction(TEXT("UpEquipWeapon"), IE_Pressed, this, &ABaseCharacter::InputEquipWeapon);
+	PlayerInputComponent->BindAction(TEXT("SwapWeapon"), IE_Pressed, this, &ABaseCharacter::InputSwapWeapon);
 
 
 	/*
@@ -217,11 +217,29 @@ void ABaseCharacter::InputAttack()
 	}
 }
 
-void ABaseCharacter::InputEquipWeapon()
+void ABaseCharacter::InputSwapWeapon()
 {
+	/*
+	* 문제점 : PickupWeapon 함수에서 배열에 추가하는데 계속 배열이 커짐 이거 수정해야할듯
+	* 
+	*/
+
 	WeaponNumber = WeaponNumber % GetMaxCountweapon();
-	UE_LOG(LogTemp, Warning, TEXT("Change To Weapon : %d"),WeaponNumber);
+	int32 size = wArray.Num();
+	UE_LOG(LogTemp, Warning, TEXT("wArray size : %d"), size);
+	if (!wArray.IsEmpty()) {
+		if (wArray[WeaponNumber] != nullptr) {
+			EWeaponState curState = wArray[WeaponNumber]->GetWeaponState();
+			if (curState == EWeaponState::EWS_PickUpped) {
+				PickupWeapon(EquippedWeapon);
+				EquipWeapon(wArray[WeaponNumber]);
+				UE_LOG(LogTemp, Warning, TEXT("Swap Weapon "));
+			}
+		}
+	}
 	WeaponNumber += 1;
+
+	UE_LOG(LogTemp, Warning, TEXT("Weapon number : %d"), WeaponNumber);
 }
 
 void ABaseCharacter::SetDirectionMovement(float deltaTime)
@@ -268,7 +286,21 @@ void ABaseCharacter::PickupWeapon(AWeapon* WeaponToPickup)
 		}
 		PickuppedWeapon = WeaponToPickup;
 		PickuppedWeapon->SetWeaponState(EWeaponState::EWS_PickUpped);
+		wArray.Add(PickuppedWeapon);
+		//AddWeaponList(PickuppedWeapon);
 	}
+}
+
+void ABaseCharacter::AddWeaponList(AWeapon* Weapon)
+{
+	if (wArray.Contains(Weapon)) {
+		UE_LOG(LogTemp, Warning, TEXT("exist"));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Not exist"));
+		wArray.Add(Weapon);
+	}
+
 }
 
 

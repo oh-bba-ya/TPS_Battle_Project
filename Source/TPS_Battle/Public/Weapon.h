@@ -22,7 +22,7 @@ UENUM(BlueprintType)
 enum class EWeaponName : uint8 {
 	EWN_Base UMETA(DisPlayNmae = "Base"),
 	EWN_Pistol UMETA(DisPlayNmae = "Pistol"),
-	EWN_SubMachineGun UMETA(DisPlayNmae = "SubMachineGun"),
+	EWN_Rifle UMETA(DisPlayNmae = "Rifle"),
 	EWN_ShotGun UMETA(DisPlayNmae = "ShotGun"),
 	EWN_SniperGun UMETA(DisPlayNmae = "SniperGun"),
 	EWN_RocketGun UMETA(DisPlayNmae = "RocketGun"),
@@ -95,5 +95,12 @@ public:
 
 	UFUNCTION()
 		virtual void Fire();
+
+	class ABaseCharacter* player;
+
+	FORCEINLINE ABaseCharacter* GetBaseCharacter() const { return player; }
+
+	UPROPERTY(EditAnywhere, Category = WeaponNiagara)
+		class UNiagaraSystem* muzzleFlash;
 
 };

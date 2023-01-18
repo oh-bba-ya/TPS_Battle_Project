@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "BaseCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWeapon::AWeapon() :
@@ -43,6 +44,11 @@ void AWeapon::BeginPlay()
 
 	if (PickupWidget != nullptr) {
 		PickupWidget->SetVisibility(false);
+	}
+
+	player = Cast<ABaseCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), ABaseCharacter::StaticClass()));
+	if (player == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("Weapon Class Player Null"));
 	}
 
 }

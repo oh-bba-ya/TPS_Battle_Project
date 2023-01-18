@@ -38,6 +38,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
 		class AWeapon* PickuppedWeapon;
 
+	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
+		TArray<AWeapon*> wArray;
 
 	class UBaseCharacterAnimInstance* anim;
 
@@ -73,7 +75,7 @@ private:
 	void InputDisableSprint();
 	void InputPickUp();
 	void InputAttack();
-	void InputEquipWeapon();
+	void InputSwapWeapon();
 
 	int32 WeaponNumber = 0;
 	int32 MaxCountWeapon = 2;
@@ -89,7 +91,7 @@ private:
 
 	void PickupWeapon(AWeapon* WeaponToPickup);
 
-
+	void AddWeaponList(AWeapon* WeaponToPickup);
 
 
 public:
