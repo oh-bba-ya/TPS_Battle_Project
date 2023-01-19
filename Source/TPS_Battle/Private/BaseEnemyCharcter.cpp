@@ -29,7 +29,7 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));		
 		GetMesh()->SetupAttachment(RootComponent);		
 	}
-	fsm = CreateDefaultSubobject<UBaseEnemyCharacterFSM>(TEXT("FSM"));
+	enemyFSM = CreateDefaultSubobject<UBaseEnemyCharacterFSM>(TEXT("FSM"));
 	/*meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("meshComp"));
 	meshComp->SetupAttachment(RootComponent);*/
 

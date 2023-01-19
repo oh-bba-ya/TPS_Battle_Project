@@ -26,9 +26,11 @@ void UBaseEnemyCharacterFSM::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto actor = UGameplayStatics::GetActorOfClass(GetWorld(), ABaseCharacter::StaticClass());
+	//auto actor = UGameplayStatics::GetActorOfClass(GetWorld(), ABaseCharacter::StaticClass());
+	auto actor = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	target = Cast<ABaseCharacter>(actor);
 	me = Cast<ABaseEnemyCharcter>(GetOwner());
+
 
 	anim = Cast<UBaseEnemyAnim>(me->GetMesh()->GetAnimInstance());
 
@@ -68,6 +70,7 @@ void UBaseEnemyCharacterFSM::IdleState()
 		currentTime = 0;
 		anim->animState = mState;
 		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
+		UE_LOG(LogTemp, Warning, TEXT("Idle"));
 	}
 }
 
@@ -79,13 +82,13 @@ void UBaseEnemyCharacterFSM::MoveState()
 	/*ABaseEnemyCharcter* enemy = Cast<ABaseEnemyCharcter>(actor);
 	FNavigationInvoker(enemy, 500.0f, 800.0f);*/
 	//ai->MoveToLocation(destination);
-
+	//UE_LOG(LogTemp, Warning, TEXT("Move1"));
 	auto ns = UNavigationSystemV1::GetNavigationSystem(GetWorld());
 
 	FPathFindingQuery query;
 	FAIMoveRequest req;
 
-	req.SetAcceptanceRadius(3);
+	req.SetAcceptanceRadius(200);
 	req.SetGoalLocation(destination);
 	ai->BuildPathfindingQuery(req, query);
 
@@ -94,6 +97,7 @@ void UBaseEnemyCharacterFSM::MoveState()
 	if (r.Result == ENavigationQueryResult::Success)
 	{
 		ai->MoveToLocation(destination);
+		UE_LOG(LogTemp, Warning, TEXT("Move2 : go Target"));
 	}
 	else
 	{
@@ -101,6 +105,7 @@ void UBaseEnemyCharacterFSM::MoveState()
 		if (result == EPathFollowingRequestResult::AlreadyAtGoal)
 		{
 			GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
+			UE_LOG(LogTemp, Warning, TEXT("Move3 : go Random Loc"));
 		}
 	}
 
@@ -111,7 +116,10 @@ void UBaseEnemyCharacterFSM::MoveState()
 		anim->animState = mState;
 		anim->bAttackPlay = true;
 		currentTime = attackDelayTime;
+		UE_LOG(LogTemp, Warning, TEXT("Move4 : go Attack"));
 	}	
+
+
 }
 
 void UBaseEnemyCharacterFSM::AttackState()
@@ -121,7 +129,7 @@ void UBaseEnemyCharacterFSM::AttackState()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ATTACK"));
 		currentTime = 0;
-		anim->bAttackPlay = true;
+		anim->bAttackPlay = true;		
 	}
 
 	float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
@@ -131,7 +139,7 @@ void UBaseEnemyCharacterFSM::AttackState()
 		mState = EEnemyState::Move;
 		anim->animState = mState;
 		
-		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
+		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);		
 	} 	
 }
 

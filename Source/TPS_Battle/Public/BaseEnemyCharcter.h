@@ -30,16 +30,15 @@ public:
 	//class UStaticMeshComponent* MeshComp;
 	//class USceneComponent* sceneComp;
 
-	int32 GetEnemyHP();
-	void SetEnemyHP(int32 hp);
+	//int32 GetEnemyHP();
+	//void SetEnemyHP(int32 hp);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSMComponent)
-	class UBaseEnemyCharacterFSM* fsm;
+	class UBaseEnemyCharacterFSM* enemyFSM;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GunMesh)
 	class USkeletalMeshComponent* pistolMeshComp;
 
 private:
 	int32 enemyHP = 100;
-
 };
