@@ -221,10 +221,11 @@ void ABaseCharacter::InputSwapWeapon()
 {
 	WeaponNumber = WeaponNumber % GetMaxCountweapon();
 	if (!wArray.IsEmpty()) {
-		if (wArray[WeaponNumber] != nullptr) {
+		if (wArray.IsValidIndex(WeaponNumber) && wArray[WeaponNumber] != nullptr) {
 			EWeaponState curState = wArray[WeaponNumber]->GetWeaponState();
 			if (curState == EWeaponState::EWS_PickUpped) {
-				PickupWeapon(EquippedWeapon);
+				UE_LOG(LogTemp, Warning, TEXT("Change"));
+				ChangeWeapon(EquippedWeapon);
 				EquipWeapon(wArray[WeaponNumber]);
 			}
 		}
@@ -281,6 +282,23 @@ void ABaseCharacter::PickupWeapon(AWeapon* WeaponToPickup)
 			PickuppedWeapon->SetWeaponState(EWeaponState::EWS_PickUpped);
 		}
 		
+	}
+}
+
+void ABaseCharacter::ChangeWeapon(AWeapon* Weapon)
+{
+	if (Weapon != nullptr) {
+
+		Weapon->GetAreaSphere()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+		const USkeletalMeshSocket* bagSocket = GetMesh()->GetSocketByName(FName("SpineBagSocket"));
+
+		if (bagSocket) {
+			bagSocket->AttachActor(Weapon, GetMesh());
+		}
+		PickuppedWeapon = Weapon;
+		PickuppedWeapon->SetWeaponState(EWeaponState::EWS_PickUpped);
+
 	}
 }
 

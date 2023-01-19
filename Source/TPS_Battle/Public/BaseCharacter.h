@@ -94,7 +94,11 @@ private:
 
 	void PickupWeapon(AWeapon* WeaponToPickup);
 
+	void ChangeWeapon(AWeapon* Weapon);
+
 	bool AddWeaponList(AWeapon* WeaponToPickup);
+
+
 
 
 public:
