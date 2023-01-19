@@ -78,7 +78,10 @@ private:
 	void InputSwapWeapon();
 
 	int32 WeaponNumber = 0;
-	int32 MaxCountWeapon = 2;
+
+	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
+	int32 MaxCountWeapon = 5;
+
 #pragma endregion
 
 	void SetDirectionMovement(float deltaTime);
@@ -91,7 +94,7 @@ private:
 
 	void PickupWeapon(AWeapon* WeaponToPickup);
 
-	void AddWeaponList(AWeapon* WeaponToPickup);
+	bool AddWeaponList(AWeapon* WeaponToPickup);
 
 
 public:
