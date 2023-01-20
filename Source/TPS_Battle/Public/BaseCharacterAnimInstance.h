@@ -26,6 +26,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
 		class UAnimMontage* attackPistolAnimMontage;
 
+
 	void PlayAttackAnim();
 
 	// 플레이어 좌우 이동속도

@@ -6,6 +6,8 @@
 #include "Components/WidgetComponent.h"
 #include "BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Animation/AnimationAsset.h"
+#include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
 AWeapon::AWeapon() :
@@ -74,13 +76,6 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 void AWeapon::Fire()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Base Weapon Fire"));
-	/*
-	if (WeaponName == EWeaponName::EWN_Base) {
-		FTransform t = WeaponMesh->GetSocketTransform(TEXT("FirePosition"));
-
-		GetWorld()->SpawnActor<AProjectile>(BulletFactory, t);
-	}
-	*/
 }
 
 // Called every frame

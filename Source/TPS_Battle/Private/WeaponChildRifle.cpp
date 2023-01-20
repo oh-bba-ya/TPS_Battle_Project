@@ -33,8 +33,15 @@ void AWeaponChildRifle::BeginPlay()
 /// </summary>
 void AWeaponChildRifle::Fire()
 {
-	const USkeletalMeshSocket* firePosition = GetWeaponMesh()->GetSocketByName(FName("FirePosition"));
 	UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
+
+	// 총애니메이션 재생
+	if (FireAnimation) {
+		WeaponMesh->PlayAnimation(FireAnimation, false);
+	}
+
+	/*
+	const USkeletalMeshSocket* firePosition = GetWeaponMesh()->GetSocketByName(FName("FirePosition"));
 	if (firePosition != nullptr) {
 		const FVector startPos = firePosition->GetSocketLocation(GetWeaponMesh());
 		
@@ -60,7 +67,7 @@ void AWeaponChildRifle::Fire()
 
 		
 	}
-
+	*/
 }
 
 void AWeaponChildRifle::AutoFire()

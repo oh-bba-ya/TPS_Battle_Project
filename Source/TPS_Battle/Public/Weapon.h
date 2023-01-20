@@ -49,8 +49,7 @@ protected:
 
 
 private:
-	UPROPERTY(EditAnywhere , Category = WeaponProperties)
-	class USkeletalMeshComponent* WeaponMesh;
+
 
 	UPROPERTY(EditAnywhere, Category = WeaponProperties)
 	class USphereComponent* AreaSphere;
@@ -71,12 +70,17 @@ private:
 
 
 
-
 public:
-	//UPROPERTY(EditAnywhere, Category = WeaponProperties)
-		//TSubclassOf<class AProjectile> BulletFactory;
+	UPROPERTY(EditAnywhere, Category = WeaponProperties)
+		class USkeletalMeshComponent* WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = WeaponProperties)
+		class UAnimationAsset* FireAnimation;
+
+
 	UPROPERTY(EditAnywhere, Category = WeaponProperties)
 		TSubclassOf<class AProjectile> bulletFactory;
+
 
 	UFUNCTION()
 		void SetVisibilityWIdget(bool overlap);
