@@ -67,9 +67,10 @@ void ABaseCharacter::BeginPlay()
 			widgetPlayer->PrintState(basePlayerMP, 100, false);
 		}
 	}
-	EquipWeapon(SpawnDefaultWeapon());
 
 	anim = Cast<UBaseCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	EquipWeapon(SpawnDefaultWeapon());
 	
 }
 
@@ -263,6 +264,16 @@ void ABaseCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 		
 		EquippedWeapon = WeaponToEquip;
 		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		
+		if (EquippedWeapon->GetWeaponName() == EWeaponName::EWN_Pistol) {
+			anim->isPistol = true;
+			UE_LOG(LogTemp, Warning, TEXT("Pistol"));
+		}
+		else {
+			anim->isPistol = false;
+			UE_LOG(LogTemp, Warning, TEXT("Rifle"));
+		}
+		
 	}
 }
 
@@ -271,15 +282,7 @@ void ABaseCharacter::PickupWeapon(AWeapon* WeaponToPickup)
 	if (WeaponToPickup != nullptr) {
 		
 		if (AddWeaponList(WeaponToPickup)) {
-			WeaponToPickup->GetAreaSphere()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-
-			const USkeletalMeshSocket* bagSocket = GetMesh()->GetSocketByName(FName("SpineBagSocket"));
-
-			if (bagSocket) {
-				bagSocket->AttachActor(WeaponToPickup, GetMesh());
-			}
-			PickuppedWeapon = WeaponToPickup;
-			PickuppedWeapon->SetWeaponState(EWeaponState::EWS_PickUpped);
+			ChangeWeapon(WeaponToPickup);
 		}
 		
 	}

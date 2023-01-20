@@ -35,6 +35,8 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
+		bool isPistol = true;
 
 
 };

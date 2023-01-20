@@ -27,6 +27,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = RifleProperty)
 		int32 ShotRange = 5000;
 
+	UPROPERTY(EditAnywhere, Category = RifleProperty)
+		float fireInterval = 0.5f;
+
+
+	FTimerHandle fireTimerHandle;
+
+	void AutoFire();
 
 public:
 	UPROPERTY(EditAnywhere, Category = RifleProperty)

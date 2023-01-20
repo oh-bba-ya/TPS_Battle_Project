@@ -33,9 +33,8 @@ void AWeaponChildRifle::BeginPlay()
 /// </summary>
 void AWeaponChildRifle::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
 	const USkeletalMeshSocket* firePosition = GetWeaponMesh()->GetSocketByName(FName("FirePosition"));
-
+	UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
 	if (firePosition != nullptr) {
 		const FVector startPos = firePosition->GetSocketLocation(GetWeaponMesh());
 		
@@ -48,9 +47,9 @@ void AWeaponChildRifle::Fire()
 			param.AddIgnoredActor(this);
 
 			bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startPos, endPos, ECC_Visibility, param);
-			UE_LOG(LogTemp, Warning, TEXT("hit Name"));
+			UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
 			if (bHit) {
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), temp, hitInfo.ImpactPoint);
+				//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), temp, hitInfo.ImpactPoint);
 				if (muzzleFlash != nullptr) {
 					//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlash, firePosition);
 				}
@@ -61,10 +60,11 @@ void AWeaponChildRifle::Fire()
 
 		
 	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("fir Fire"));
-	}
 
+}
+
+void AWeaponChildRifle::AutoFire()
+{
 }
 
 
