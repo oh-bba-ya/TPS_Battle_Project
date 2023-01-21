@@ -52,20 +52,6 @@ void AWeaponChildPistol::Fire(const FVector& HitTarget)
 		}
 	}
 
-	/*
-	// 총애니메이션 재생
-	if (FireAnimation) {
-		WeaponMesh->PlayAnimation(FireAnimation, false);
-	}
-	
-	const USkeletalMeshSocket* firePosition = GetWeaponMesh()->GetSocketByName(FName("FirePosition"));
-	if (firePosition != nullptr) {
-		const FVector startPos = firePosition->GetSocketLocation(GetWeaponMesh());;
-		
-		FRotator startRot = player->GetCamComponent()->GetComponentRotation();
-		GetWorld()->SpawnActor<AProjectile>(bulletFactory, startPos,startRot );
-	}
-	*/
 }
 
 

@@ -4,7 +4,9 @@
 #include "Projectile.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Particles/ParticleSystem.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -30,7 +32,7 @@ AProjectile::AProjectile()
 
 
 	movementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
-
+	movementComp->bRotationFollowsVelocity = true;
 	movementComp->SetUpdatedComponent(boxComp);
 	movementComp->InitialSpeed = Speed;
 	movementComp->MaxSpeed = Speed;
@@ -42,6 +44,17 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (Tracer) {
+		TracerComp = UGameplayStatics::SpawnEmitterAttached(
+			Tracer,
+			boxComp,
+			FName(),
+			GetActorLocation(),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition
+		);
+	}
 
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBulletOverlap);
 

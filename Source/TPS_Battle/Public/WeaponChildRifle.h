@@ -25,19 +25,17 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = RifleProperty)
-		int32 ShotRange = 5000;
-
-	UPROPERTY(EditAnywhere, Category = RifleProperty)
 		float fireInterval = 0.5f;
 
 
 	FTimerHandle fireTimerHandle;
 
+
 	void AutoFire();
+	void ResetTimer();
 
 public:
-	UPROPERTY(EditAnywhere, Category = RifleProperty)
-	class UParticleSystem* temp;
+
 
 
 	

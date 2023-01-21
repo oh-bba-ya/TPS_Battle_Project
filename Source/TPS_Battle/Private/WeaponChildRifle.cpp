@@ -6,9 +6,7 @@
 #include "BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
-#include "Camera/CameraComponent.h"
-#include "Kismet/GameplayStatics.h"
-//#include "NiagaraFunctionLibrary.h"
+#include "TimerManager.h"
 
 
 AWeaponChildRifle::AWeaponChildRifle()
@@ -36,44 +34,37 @@ void AWeaponChildRifle::Fire(const FVector& HitTarget)
 	Super::Fire(HitTarget);
 	UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
 
-	/*
-	// 총애니메이션 재생
-	if (FireAnimation) {
-		WeaponMesh->PlayAnimation(FireAnimation, false);
-	}
+	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName(FName("MuzzleFlash"));
 
+	if (MuzzleFlashSocket) {
+		FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
 
-	const USkeletalMeshSocket* firePosition = GetWeaponMesh()->GetSocketByName(FName("FirePosition"));
-	if (firePosition != nullptr) {
-		const FVector startPos = firePosition->GetSocketLocation(GetWeaponMesh());
-		
-		if (player != nullptr) {
-			FVector endPos = player->GetCamComponent()->GetComponentLocation() 
-				+ player->GetCamComponent()->GetForwardVector() 
-				* ShotRange;
-			FHitResult hitInfo;
-			FCollisionQueryParams param;
-			param.AddIgnoredActor(this);
+		FVector ToTarget = HitTarget - SocketTransform.GetLocation();
 
-			bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startPos, endPos, ECC_Visibility, param);
-			UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
-			if (bHit) {
-				//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), temp, hitInfo.ImpactPoint);
-				if (muzzleFlash != nullptr) {
-					//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlash, firePosition);
-				}
-				
+		FRotator TargetRotation = ToTarget.Rotation();
+
+		if (bulletFactory) {
+			UWorld* World = GetWorld();
+			if (World) {
+				World->SpawnActor<AProjectile>(bulletFactory, SocketTransform.GetLocation(), TargetRotation);
 			}
-
 		}
-
-		
 	}
-	*/
 }
 
 void AWeaponChildRifle::AutoFire()
 {
+	GetWorldTimerManager().SetTimer(
+		fireTimerHandle,
+		this,
+		ResetTimer,
+		fireInterval
+	);
+}
+
+void AWeaponChildRifle::ResetTimer()
+{
+
 }
 
 

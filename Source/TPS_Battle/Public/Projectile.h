@@ -47,6 +47,11 @@ public:
 
 	void DestoryTimeBullet();
 
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+	class UParticleSystem* Tracer;
+
+	class UParticleSystemComponent* TracerComp;
+
 
 
 

@@ -115,7 +115,5 @@ public:
 
 	FORCEINLINE ABaseCharacter* GetBaseCharacter() const { return player; }
 
-	UPROPERTY(EditAnywhere, Category = WeaponNiagara)
-		class UNiagaraSystem* muzzleFlash;
 
 };
