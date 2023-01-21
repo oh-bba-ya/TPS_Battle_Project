@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+
 UENUM(BlueprintType)
 enum class EWeaponState : uint8 {
 	EWS_Initial UMETA(DisPlayNmae = "Initial State"),
@@ -67,6 +68,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
 		float damage = 1;
 
+	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
+		float TraceLength = 80000;
 
 
 
@@ -80,6 +83,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = WeaponProperties)
 		TSubclassOf<class AProjectile> bulletFactory;
+
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 
 	UFUNCTION()
@@ -96,6 +101,9 @@ public:
 	FORCEINLINE float GetDamage() const { return damage; }
 	FORCEINLINE void SetDamage(float d) { damage = d > 0 ? d : 1; }
 	FORCEINLINE  USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
+
+	FORCEINLINE float GetTraceLength() const {return TraceLength;}
+	FORCEINLINE void SetTraceLength(float L)  { TraceLength = L > 0 ? L : 0 ; }
 
 	UFUNCTION()
 		virtual void Fire();

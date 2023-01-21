@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimationAsset.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AWeapon::AWeapon() :
@@ -15,7 +16,7 @@ AWeapon::AWeapon() :
 	WeaponName(EWeaponName::EWN_Base)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	SetRootComponent(WeaponMesh);
@@ -83,6 +84,55 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FHitResult HitResult;
+	TraceUnderCrosshairs(HitResult);
+
+}
+
+void AWeapon::TraceUnderCrosshairs(FHitResult& TraceHitResult)
+{
+	FVector2D ViewportSize;
+	if (GEngine && GEngine->GameViewport) {
+		GEngine->GameViewport->GetViewportSize(ViewportSize);
+	}
+
+	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
+	FVector CrosshairWorldPosition;
+	FVector CrosshairWorldDirection;
+
+	// Screen -> World ÁÂÇ¥°è º¯°æ
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+		UGameplayStatics::GetPlayerController(GetWorld(), 0),
+		CrosshairLocation,
+		CrosshairWorldPosition,
+		CrosshairWorldDirection
+	);
+
+	if (bScreenToWorld) {
+		FVector Start = CrosshairWorldPosition;
+
+		FVector End = Start + CrosshairWorldDirection * 80000.f;
+
+		GetWorld()->LineTraceSingleByChannel(
+			TraceHitResult,
+			Start,
+			End,
+			ECollisionChannel::ECC_Visibility
+		);
+
+		if (!TraceHitResult.bBlockingHit) {
+			TraceHitResult.ImpactPoint = End;
+		}
+		else {
+			DrawDebugSphere(
+				GetWorld(),
+				TraceHitResult.ImpactPoint,
+				12.f,
+				12,
+				FColor::Red
+			);
+		}
+	}
 }
 
 void AWeapon::SetVisibilityWIdget(bool overlap)
