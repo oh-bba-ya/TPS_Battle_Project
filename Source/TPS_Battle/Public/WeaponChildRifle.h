@@ -21,7 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 
 
-	void Fire() override;
+	void Fire(const FVector& HitTarget) override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = RifleProperty)

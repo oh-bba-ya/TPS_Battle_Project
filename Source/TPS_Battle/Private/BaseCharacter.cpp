@@ -211,7 +211,7 @@ void ABaseCharacter::InputPickUp()
 void ABaseCharacter::InputAttack()
 {
 	if (EquippedWeapon != nullptr && EquippedWeapon->GetWeaponState() == EWeaponState::EWS_Equipped) {
-		EquippedWeapon->Fire();
+		EquippedWeapon->Fire(EquippedWeapon->hitTarget);
 		if (anim != nullptr) {
 			anim->PlayAttackAnim();
 		}

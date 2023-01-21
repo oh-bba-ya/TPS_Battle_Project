@@ -31,16 +31,18 @@ void AWeaponChildRifle::BeginPlay()
 /// LineTrace를 이용한 공격
 /// CameraComponent 방향으로 공격한다 (추후 Crosshair (Viewport)방향으로 바꿔야함)
 /// </summary>
-void AWeaponChildRifle::Fire()
+void AWeaponChildRifle::Fire(const FVector& HitTarget)
 {
+	Super::Fire(HitTarget);
 	UE_LOG(LogTemp, Warning, TEXT("Rifle Fire"));
 
+	/*
 	// 총애니메이션 재생
 	if (FireAnimation) {
 		WeaponMesh->PlayAnimation(FireAnimation, false);
 	}
 
-	/*
+
 	const USkeletalMeshSocket* firePosition = GetWeaponMesh()->GetSocketByName(FName("FirePosition"));
 	if (firePosition != nullptr) {
 		const FVector startPos = firePosition->GetSocketLocation(GetWeaponMesh());

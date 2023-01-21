@@ -30,11 +30,29 @@ void AWeaponChildPistol::BeginPlay()
 	
 }
 
-void AWeaponChildPistol::Fire()
+void AWeaponChildPistol::Fire(const FVector& HitTarget)
 {
+	Super::Fire(HitTarget);
 	UE_LOG(LogTemp, Warning, TEXT("Pistol Fire"));
 
+	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName(FName("MuzzleFlash"));
 
+	if (MuzzleFlashSocket) {
+		FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
+
+		FVector ToTarget = HitTarget - SocketTransform.GetLocation();
+
+		FRotator TargetRotation = ToTarget.Rotation();
+
+		if (bulletFactory) {
+			UWorld* World = GetWorld();
+			if (World) {
+				World->SpawnActor<AProjectile>(bulletFactory, SocketTransform.GetLocation(),TargetRotation);
+			}
+		}
+	}
+
+	/*
 	// 총애니메이션 재생
 	if (FireAnimation) {
 		WeaponMesh->PlayAnimation(FireAnimation, false);
@@ -47,7 +65,7 @@ void AWeaponChildPistol::Fire()
 		FRotator startRot = player->GetCamComponent()->GetComponentRotation();
 		GetWorld()->SpawnActor<AProjectile>(bulletFactory, startPos,startRot );
 	}
-
+	*/
 }
 
 

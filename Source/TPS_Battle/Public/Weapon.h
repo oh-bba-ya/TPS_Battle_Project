@@ -71,11 +71,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = WeaponProperties, meta = (AllowPrivateAccess = "true"))
 		float TraceLength = 80000;
 
+	UPROPERTY(EditAnywhere, Category = WeaponProperties)
+		class USkeletalMeshComponent* WeaponMesh;
+
 
 
 public:
-	UPROPERTY(EditAnywhere, Category = WeaponProperties)
-		class USkeletalMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = WeaponProperties)
 		class UAnimationAsset* FireAnimation;
@@ -105,8 +106,10 @@ public:
 	FORCEINLINE float GetTraceLength() const {return TraceLength;}
 	FORCEINLINE void SetTraceLength(float L)  { TraceLength = L > 0 ? L : 0 ; }
 
+	FVector hitTarget;
+
 	UFUNCTION()
-		virtual void Fire();
+		virtual void Fire(const FVector& HitTarget);
 
 	class ABaseCharacter* player;
 

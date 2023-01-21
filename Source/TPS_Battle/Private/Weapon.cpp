@@ -74,9 +74,13 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 }
 
-void AWeapon::Fire()
+void AWeapon::Fire(const FVector& HitTarget)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Base Weapon Fire"));
+	// 총애니메이션 재생
+	if (FireAnimation) {
+		UE_LOG(LogTemp, Warning, TEXT("Weapon Animation"));
+		WeaponMesh->PlayAnimation(FireAnimation, false);
+	}
 }
 
 // Called every frame
@@ -111,7 +115,7 @@ void AWeapon::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 	if (bScreenToWorld) {
 		FVector Start = CrosshairWorldPosition;
 
-		FVector End = Start + CrosshairWorldDirection * 80000.f;
+		FVector End = Start + CrosshairWorldDirection * GetTraceLength();
 
 		GetWorld()->LineTraceSingleByChannel(
 			TraceHitResult,
@@ -122,8 +126,10 @@ void AWeapon::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 
 		if (!TraceHitResult.bBlockingHit) {
 			TraceHitResult.ImpactPoint = End;
+			hitTarget = End;
 		}
 		else {
+			hitTarget = TraceHitResult.ImpactPoint;
 			DrawDebugSphere(
 				GetWorld(),
 				TraceHitResult.ImpactPoint,

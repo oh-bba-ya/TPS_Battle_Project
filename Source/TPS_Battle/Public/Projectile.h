@@ -19,13 +19,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
-		class USphereComponent* sphereComp;
+		class UBoxComponent* boxComp;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		class UStaticMeshComponent* meshComp;
