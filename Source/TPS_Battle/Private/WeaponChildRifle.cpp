@@ -52,6 +52,7 @@ void AWeaponChildRifle::Fire(const FVector& HitTarget)
 	}
 }
 
+/*
 void AWeaponChildRifle::AutoFire()
 {
 	GetWorldTimerManager().SetTimer(
@@ -61,7 +62,7 @@ void AWeaponChildRifle::AutoFire()
 		fireInterval
 	);
 }
-
+*/
 void AWeaponChildRifle::ResetTimer()
 {
 
