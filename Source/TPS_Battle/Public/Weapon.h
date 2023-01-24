@@ -25,8 +25,7 @@ enum class EWeaponName : uint8 {
 	EWN_Pistol UMETA(DisPlayNmae = "Pistol"),
 	EWN_Rifle UMETA(DisPlayNmae = "Rifle"),
 	EWN_ShotGun UMETA(DisPlayNmae = "ShotGun"),
-	EWN_SniperGun UMETA(DisPlayNmae = "SniperGun"),
-	EWN_RocketGun UMETA(DisPlayNmae = "RocketGun"),
+	EWN_GrenadeGun UMETA(DisPlayNmae = "GrenadeGun"),
 };
 
 UCLASS()
@@ -114,6 +113,9 @@ public:
 	class ABaseCharacter* player;
 
 	FORCEINLINE ABaseCharacter* GetBaseCharacter() const { return player; }
+
+	UPROPERTY(EditAnywhere, Category = WeaponProperty)
+		class UParticleSystem* BeamParticles;
 
 
 };

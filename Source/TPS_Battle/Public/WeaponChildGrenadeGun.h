@@ -4,28 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Weapon.h"
-#include "WeaponChildRifle.generated.h"
+#include "WeaponChildGrenadeGun.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPS_BATTLE_API AWeaponChildRifle : public AWeapon
+class TPS_BATTLE_API AWeaponChildGrenadeGun : public AWeapon
 {
 	GENERATED_BODY()
+	
 public:
-	AWeaponChildRifle();
-
-
+	AWeaponChildGrenadeGun();
 protected:
 	virtual void BeginPlay() override;
 
-
 	void Fire(const FVector& HitTarget) override;
-
-
-
-
-	
-	
 };

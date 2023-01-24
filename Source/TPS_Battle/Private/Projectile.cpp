@@ -18,8 +18,6 @@ AProjectile::AProjectile()
 	SetRootComponent(boxComp);
 
 	boxComp->SetBoxExtent(FVector(10, 5, 5));
-	boxComp->bHiddenInGame = false;
-	boxComp->SetLineThickness(2.0f);
 
 	// FName은 대소문자 구분 안함
 	boxComp->SetCollisionProfileName(TEXT("BlockAll"));

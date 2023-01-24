@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
 #include "Camera/CameraComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 AWeaponChildPistol::AWeaponChildPistol()
 {
@@ -22,7 +23,7 @@ void AWeaponChildPistol::BeginPlay()
 
 	player = Cast<ABaseCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), ABaseCharacter::StaticClass()));
 	if (player != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Player"));
+		UE_LOG(LogTemp, Warning, TEXT("Not null Player"));
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("playerNull"));
@@ -50,6 +51,7 @@ void AWeaponChildPistol::Fire(const FVector& HitTarget)
 				World->SpawnActor<AProjectile>(bulletFactory, SocketTransform.GetLocation(),TargetRotation);
 			}
 		}
+
 	}
 
 }

@@ -16,6 +16,7 @@
 #include "BaseCharacterAnimInstance.h"
 
 
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -101,6 +102,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Pressed, this, &ABaseCharacter::InputPickUp);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ABaseCharacter::InputAttack);
+	
 	
 	PlayerInputComponent->BindAction(TEXT("SwapWeapon"), IE_Pressed, this, &ABaseCharacter::InputSwapWeapon);
 
@@ -211,12 +213,17 @@ void ABaseCharacter::InputPickUp()
 void ABaseCharacter::InputAttack()
 {
 	if (EquippedWeapon != nullptr && EquippedWeapon->GetWeaponState() == EWeaponState::EWS_Equipped) {
+
+		//EquippedWeapon->StartFireTimer();
+
 		EquippedWeapon->Fire(EquippedWeapon->hitTarget);
 		if (anim != nullptr) {
 			anim->PlayAttackAnim();
 		}
 	}
 }
+
+
 
 void ABaseCharacter::InputSwapWeapon()
 {

@@ -10,6 +10,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
 
+
 // Sets default values
 AWeapon::AWeapon() :
 	WeaponState(EWeaponState::EWS_PickUp),
@@ -82,6 +83,8 @@ void AWeapon::Fire(const FVector& HitTarget)
 		WeaponMesh->PlayAnimation(FireAnimation, false);
 	}
 }
+
+
 
 // Called every frame
 void AWeapon::Tick(float DeltaTime)
