@@ -53,10 +53,14 @@ void AProjectile::BeginPlay()
 			EAttachLocation::KeepWorldPosition
 		);
 	}
+	
 
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBulletOverlap);
 
 	DestoryTimeBullet();
+	if (isGrenadeBullet) {
+		ExplosionTimer();
+	}
 }
 
 // Called every frame
@@ -78,6 +82,24 @@ void AProjectile::DestoryBullet()
 void AProjectile::DestoryTimeBullet()
 {
 	FTimerHandle destoryTime;
+
 	GetWorld()->GetTimerManager().SetTimer(destoryTime, this, &AProjectile::DestoryBullet, destroyBulletTime, false);
+}
+
+void AProjectile::Explosion()
+{
+	if (grenadeImpact) {
+		UE_LOG(LogTemp, Warning, TEXT("Explosion"));
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), grenadeImpact, GetActorLocation(), GetActorRotation());;
+		FTimerHandle destoryTime;
+
+		GetWorld()->GetTimerManager().SetTimer(destoryTime, this, &AProjectile::DestoryBullet, 1.f, false);
+	}
+}
+
+void AProjectile::ExplosionTimer()
+{
+	FTimerHandle explosionTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(explosionTimerHandle, this, &AProjectile::Explosion, explosionTime, false);
 }
 

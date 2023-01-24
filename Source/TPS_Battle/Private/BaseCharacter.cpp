@@ -29,7 +29,7 @@ ABaseCharacter::ABaseCharacter()
 	springComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringComp"));
 	springComp->SetupAttachment(RootComponent);
 	springComp->SetRelativeLocation(FVector(0, 70, 90));
-	springComp->TargetArmLength = 200;
+	springComp->TargetArmLength = 300;
 
 	springComp->bUsePawnControlRotation = true;
 

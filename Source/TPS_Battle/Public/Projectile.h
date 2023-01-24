@@ -38,7 +38,16 @@ public:
 		int32 Speed = 2000;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
-		float destroyBulletTime = 2.0f;
+		float destroyBulletTime = 5.0f;
+
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		float explosionTime = 3.0f;
+
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		bool isGrenadeBullet = false;
+
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		class UParticleSystem* grenadeImpact;
 
 	UFUNCTION()
 		void OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -46,6 +55,10 @@ public:
 	void DestoryBullet();
 
 	void DestoryTimeBullet();
+
+	void Explosion();
+	
+	void ExplosionTimer();
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 	class UParticleSystem* Tracer;
