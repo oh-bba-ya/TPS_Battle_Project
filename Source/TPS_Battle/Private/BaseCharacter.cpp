@@ -121,6 +121,13 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+void ABaseCharacter::OnCameraShake()
+{
+	if (camShake != NULL) {
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(camShake, 1.0f);
+	}
+}
+
 
 
 void ABaseCharacter::OnHitEvent(float value)

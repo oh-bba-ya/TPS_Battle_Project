@@ -47,6 +47,9 @@ public:
 		bool isGrenadeBullet = false;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		float explosionRange = 400;
+
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		class UParticleSystem* grenadeImpact;
 
 	UFUNCTION()
@@ -60,12 +63,15 @@ public:
 	
 	void ExplosionTimer();
 
+	bool OnDisTanceToPlayer();
+
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 	class UParticleSystem* Tracer;
 
 	class UParticleSystemComponent* TracerComp;
 
 
+	class ABaseCharacter* player;
 
 
 

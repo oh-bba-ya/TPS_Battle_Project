@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Particles/ParticleSystem.h"
+#include "BaseCharacter.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -61,6 +62,8 @@ void AProjectile::BeginPlay()
 	if (isGrenadeBullet) {
 		ExplosionTimer();
 	}
+
+	player = Cast<ABaseCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 // Called every frame
@@ -92,7 +95,9 @@ void AProjectile::Explosion()
 		UE_LOG(LogTemp, Warning, TEXT("Explosion"));
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), grenadeImpact, GetActorLocation(), GetActorRotation());;
 		FTimerHandle destoryTime;
-
+		if (OnDisTanceToPlayer()) {
+			player->OnCameraShake();
+		}
 		GetWorld()->GetTimerManager().SetTimer(destoryTime, this, &AProjectile::DestoryBullet, 1.f, false);
 	}
 }
@@ -101,5 +106,14 @@ void AProjectile::ExplosionTimer()
 {
 	FTimerHandle explosionTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(explosionTimerHandle, this, &AProjectile::Explosion, explosionTime, false);
+}
+
+bool AProjectile::OnDisTanceToPlayer()
+{
+	float dist = GetDistanceTo(player);
+	if (dist <= explosionRange) {
+		return true;
+	}
+	return false;
 }
 

@@ -118,6 +118,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		TSubclassOf<AWeapon> DefaultWeaponClass;
 
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		TSubclassOf<class UCameraShakeBase> camShake;
+
+	void OnCameraShake();
 
 #pragma region Enhanced Input
 	// Enhanced Input
