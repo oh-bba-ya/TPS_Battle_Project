@@ -8,7 +8,10 @@
 #include <Kismet/GameplayStatics.h>
 #include <AIController.h>
 #include "NavigationSystemTypes.h"
-#include "NavigationSystem.h"
+#include <NavigationSystem.h>
+#include "GameFrameWork/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+
 
 // Sets default values for this component's properties
 UBaseEnemyCharacterFSM::UBaseEnemyCharacterFSM()
@@ -30,10 +33,7 @@ void UBaseEnemyCharacterFSM::BeginPlay()
 	auto actor = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	target = Cast<ABaseCharacter>(actor);
 	me = Cast<ABaseEnemyCharcter>(GetOwner());
-
-
 	anim = Cast<UBaseEnemyAnim>(me->GetMesh()->GetAnimInstance());
-
 	ai = Cast<AAIController>(me->GetController());
 }
 
@@ -70,7 +70,7 @@ void UBaseEnemyCharacterFSM::IdleState()
 		currentTime = 0;
 		anim->animState = mState;
 		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
-		UE_LOG(LogTemp, Warning, TEXT("Idle"));
+		//UE_LOG(LogTemp, Warning, TEXT("Idle"));
 	}
 }
 
@@ -88,7 +88,7 @@ void UBaseEnemyCharacterFSM::MoveState()
 	FPathFindingQuery query;
 	FAIMoveRequest req;
 
-	req.SetAcceptanceRadius(200);
+	req.SetAcceptanceRadius(50);
 	req.SetGoalLocation(destination);
 	ai->BuildPathfindingQuery(req, query);
 
@@ -96,16 +96,19 @@ void UBaseEnemyCharacterFSM::MoveState()
 
 	if (r.Result == ENavigationQueryResult::Success)
 	{
+		//FVector speed = destination * 0.1;
 		ai->MoveToLocation(destination);
-		UE_LOG(LogTemp, Warning, TEXT("Move2 : go Target"));
+		//UE_LOG(LogTemp, Warning, TEXT("Move2 : go Target"));
+		me->GetCharacterMovement()->MaxWalkSpeed = 300;
 	}
 	else
 	{
 		auto result = ai->MoveToLocation(randomPos);
 		if (result == EPathFollowingRequestResult::AlreadyAtGoal)
 		{
+			me->GetCharacterMovement()->MaxWalkSpeed = 150;
 			GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
-			UE_LOG(LogTemp, Warning, TEXT("Move3 : go Random Loc"));
+			//UE_LOG(LogTemp, Warning, TEXT("Move3 : go Random Loc"));
 		}
 	}
 
@@ -118,8 +121,6 @@ void UBaseEnemyCharacterFSM::MoveState()
 		currentTime = attackDelayTime;
 		UE_LOG(LogTemp, Warning, TEXT("Move4 : go Attack"));
 	}	
-
-
 }
 
 void UBaseEnemyCharacterFSM::AttackState()
@@ -137,10 +138,23 @@ void UBaseEnemyCharacterFSM::AttackState()
 	if (distance > attackRange)
 	{
 		mState = EEnemyState::Move;
-		anim->animState = mState;
-		
+		anim->animState = mState;		
 		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);		
-	} 	
+		UE_LOG(LogTemp, Warning, TEXT("Go to Move"));
+	}
+	else
+	{
+		//FVector destination = target->GetActorLocation();
+		//FVector dir = destination - me->GetActorLocation();
+		//FRotator(dir);
+		//me->SetActorRotation(dir);
+		//me->AddActorWorldRotation(dir);
+		FVector PlayerLoc = GetWorld()->GetFirstPlayerController()->GetCharacter()->GetActorLocation();
+		FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(me->GetActorLocation(), PlayerLoc);
+		//FRotator NewRot = FMath::RInterpTo(StaticMesh2->GetComponentRotation(), PlayerRot, GetWorld()->DeltaTimeSeconds, 2);
+		//FRotator Newrot = (PlayerLoc - StaticMesh2->GetComponentLocation()).Rotation();
+		me->SetActorRotation(PlayerRot);
+	}
 }
 
 void UBaseEnemyCharacterFSM::DamageState()
@@ -166,9 +180,10 @@ void UBaseEnemyCharacterFSM::DieState()
 	}
 }
 
-void UBaseEnemyCharacterFSM::OnDamageProcess()
+void UBaseEnemyCharacterFSM::OnDamageProcess(int a)
 {
-	enemyHP--;
+	enemyHP -= a;
+	UE_LOG(LogTemp, Warning, TEXT("ENEMY ATTACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
 	if (enemyHP > 0)
 	{
 		mState = EEnemyState::Damage;

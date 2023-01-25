@@ -10,6 +10,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
 
+#include "BaseEnemyCharacterFSM.h"
+
 
 // Sets default values
 AWeapon::AWeapon() :
@@ -139,7 +141,14 @@ void AWeapon::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 				12.f,
 				12,
 				FColor::Red
-			);
+			);	
+			auto enemy = TraceHitResult.GetActor()->GetDefaultSubobjectByName(TEXT("BaseEnemyCharacterFSM"));
+			if (enemy)
+			{
+				auto OnDamageProcess = Cast<UBaseEnemyCharacterFSM>(enemy);
+				OnDamageProcess->OnDamageProcess(1);
+			}
+
 		}
 	}
 }

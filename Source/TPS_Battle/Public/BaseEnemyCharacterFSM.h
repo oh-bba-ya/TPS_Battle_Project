@@ -42,7 +42,7 @@ public:
 	void DamageState();
 	void DieState();	
 
-	void OnDamageProcess();
+	void OnDamageProcess(int a);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
 	float idleDelayTime = 2;
@@ -54,7 +54,7 @@ public:
 	class ABaseEnemyCharcter* me;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
-	float attackRange = 200.0f;
+	float attackRange = 300.0f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
 	float attackDelayTime = 2.0f;
 

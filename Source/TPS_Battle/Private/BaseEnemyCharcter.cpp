@@ -41,13 +41,13 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 
 	pistolMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh"));
 	pistolMeshComp->SetupAttachment(GetMesh(), TEXT("RightHandSocket"));
-	/*ConstructorHelpers::FObjectFinder<USkeletalMesh> tempGunMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Resources/Weapon/MilitaryWeapSilver/Weapons/Pistols_A.Pistols_A''"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempGunMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Resources/Weapon/MilitaryWeapSilver/Weapons/Assault_Rifle_A.Assault_Rifle_A'"));
 	if(tempGunMesh.Succeeded())
 	{		
 		pistolMeshComp->SetSkeletalMesh(tempGunMesh.Object);
 		pistolMeshComp->SetRelativeLocation(FVector(-42, 7, 1));
 		pistolMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
-	}*/
+	}
 }
 
 // Called when the game starts or when spawned
