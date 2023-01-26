@@ -22,6 +22,8 @@ void AWeaponChildRifle::BeginPlay()
 
 	SetWeaponName(EWeaponName::EWN_Rifle);
 
+	SetFireDelay(0.2f);
+
 }
 
 

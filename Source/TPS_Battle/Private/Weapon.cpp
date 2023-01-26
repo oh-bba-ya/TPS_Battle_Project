@@ -10,8 +10,6 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
 
-#include "BaseEnemyCharacterFSM.h"
-
 
 // Sets default values
 AWeapon::AWeapon() :
@@ -81,7 +79,6 @@ void AWeapon::Fire(const FVector& HitTarget)
 {
 	// 총애니메이션 재생
 	if (FireAnimation) {
-		UE_LOG(LogTemp, Warning, TEXT("Weapon Animation"));
 		WeaponMesh->PlayAnimation(FireAnimation, false);
 	}
 }
@@ -142,13 +139,6 @@ void AWeapon::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 				12,
 				FColor::Red
 			);	
-			auto enemy = TraceHitResult.GetActor()->GetDefaultSubobjectByName(TEXT("BaseEnemyCharacterFSM"));
-			if (enemy)
-			{
-				auto OnDamageProcess = Cast<UBaseEnemyCharacterFSM>(enemy);
-				OnDamageProcess->OnDamageProcess(1);
-			}
-
 		}
 	}
 }

@@ -183,7 +183,7 @@ void UBaseEnemyCharacterFSM::DieState()
 void UBaseEnemyCharacterFSM::OnDamageProcess(int a)
 {
 	enemyHP -= a;
-	UE_LOG(LogTemp, Warning, TEXT("ENEMY ATTACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+	UE_LOG(LogTemp, Warning, TEXT("OnDamage : %d"),enemyHP);
 	if (enemyHP > 0)
 	{
 		mState = EEnemyState::Damage;

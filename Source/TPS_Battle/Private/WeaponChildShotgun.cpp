@@ -17,6 +17,8 @@ void AWeaponChildShotgun::BeginPlay()
 
 	SetWeaponName(EWeaponName::EWN_ShotGun);
 
+	SetFireDelay(1.5f);
+
 }
 
 void AWeaponChildShotgun::Fire(const FVector& HitTarget)
@@ -32,9 +34,10 @@ void AWeaponChildShotgun::Fire(const FVector& HitTarget)
 		FVector Start = SocketTransform.GetLocation();
 		for (int32 i = 0; i < NumberOfPellets; i++) {
 			FVector End = TraceEndWithScatter(Start, HitTarget);
+			if (bulletFactory != NULL) {
+				GetWorld()->SpawnActor<AProjectile>(bulletFactory, SocketTransform.GetLocation(), End.Rotation());
+			}
 		}
-
-
 	}
 }
 
@@ -45,16 +48,16 @@ FVector AWeaponChildShotgun::TraceEndWithScatter(const FVector& TraceStart, cons
 	FVector EndLoc = SphereCenter + RandVec;
 	FVector ToEndLoc = EndLoc - TraceStart;
 
-	DrawDebugSphere(GetWorld(), SphereCenter, SphereRadius, 12, FColor::Red, true);
-	DrawDebugSphere(GetWorld(), EndLoc, 4.f, 12, FColor::Orange, true);
-	/*
+	DrawDebugSphere(GetWorld(), SphereCenter, SphereRadius, 12, FColor::Red, false,1.0f);
+	DrawDebugSphere(GetWorld(), EndLoc, 4.f, 12, FColor::Orange, false,1.0f);
 	DrawDebugLine(GetWorld(),
 		TraceStart,
 		FVector(TraceStart + ToEndLoc * GetTraceLength() / ToEndLoc.Size()),
 		FColor::Cyan,
-		true
+		false,
+		1.0f
 	);
-	*/
+	
 	
 	return FVector(TraceStart + ToEndLoc * GetTraceLength() / ToEndLoc.Size());
 }

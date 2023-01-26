@@ -8,6 +8,9 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "BaseCharacter.h"
+#include "BaseEnemyCharcter.h"
+#include "BaseEnemyCharacterFSM.h"
+
 
 // Sets default values
 AProjectile::AProjectile()
@@ -75,6 +78,14 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+
+	ABaseEnemyCharcter* enemy = Cast<ABaseEnemyCharcter>(OtherActor);
+	
+	if (enemy != nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"));
+		enemy->enemyFSM->OnDamageProcess(GetDamage());
+	}
+	
 }
 
 void AProjectile::DestoryBullet()
@@ -96,6 +107,7 @@ void AProjectile::Explosion()
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), grenadeImpact, GetActorLocation(), GetActorRotation());;
 		FTimerHandle destoryTime;
 		if (OnDisTanceToPlayer()) {
+			player->OnHitEvent(explosionDamage);
 			player->OnCameraShake();
 		}
 		GetWorld()->GetTimerManager().SetTimer(destoryTime, this, &AProjectile::DestoryBullet, 1.f, false);

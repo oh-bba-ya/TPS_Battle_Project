@@ -21,20 +21,12 @@ void AWeaponChildPistol::BeginPlay()
 {
 	Super::BeginPlay();
 
-	player = Cast<ABaseCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), ABaseCharacter::StaticClass()));
-	if (player != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Not null Player"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("playerNull"));
-	}
 	
 }
 
 void AWeaponChildPistol::Fire(const FVector& HitTarget)
 {
 	Super::Fire(HitTarget);
-	UE_LOG(LogTemp, Warning, TEXT("Pistol Fire"));
 
 	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName(FName("MuzzleFlash"));
 

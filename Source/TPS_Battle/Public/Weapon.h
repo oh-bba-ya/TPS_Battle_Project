@@ -76,6 +76,8 @@ private:
 
 
 public:
+	UPROPERTY(EditDefaultsOnly, Category = WeaponProperties)
+		float fireDelay = 1;
 
 	UPROPERTY(EditDefaultsOnly, Category = WeaponProperties)
 		class UAnimationAsset* FireAnimation;
@@ -117,5 +119,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = WeaponProperty)
 		class UParticleSystem* BeamParticles;
 
-
+	FORCEINLINE float GetFireDelay() const { return fireDelay; }
+	FORCEINLINE void SetFireDelay(float fd) { fireDelay = fd > 0 ? fd : 1; }
 };

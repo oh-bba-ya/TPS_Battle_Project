@@ -35,6 +35,9 @@ public:
 		class UProjectileMovementComponent* movementComp;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		float Damage = 1;
+
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		int32 Speed = 2000;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
@@ -45,6 +48,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		bool isGrenadeBullet = false;
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		float explosionDamage = 10;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		float explosionRange = 400;
@@ -73,6 +78,7 @@ public:
 
 	class ABaseCharacter* player;
 
-
+	FORCEINLINE float GetDamage() const { return Damage; }
+	FORCEINLINE void SetDamage(float d) { Damage = d <= 0 ? 1 : d; }
 
 };

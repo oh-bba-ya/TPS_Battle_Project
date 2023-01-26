@@ -102,6 +102,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Pressed, this, &ABaseCharacter::InputPickUp);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ABaseCharacter::InputAttack);
+	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Released, this, &ABaseCharacter::InputAttackRelease);
 	
 	
 	PlayerInputComponent->BindAction(TEXT("SwapWeapon"), IE_Pressed, this, &ABaseCharacter::InputSwapWeapon);
@@ -219,15 +220,28 @@ void ABaseCharacter::InputPickUp()
 
 void ABaseCharacter::InputAttack()
 {
+	GetWorld()->GetTimerManager().SetTimer(attackTimer, this, &ABaseCharacter::Attack, attackDelay, true);
+	Attack();
+}
+
+void ABaseCharacter::InputAttackRelease()
+{
+	GetWorld()->GetTimerManager().ClearTimer(attackTimer);
+}
+
+void ABaseCharacter::Attack()
+{
 	if (EquippedWeapon != nullptr && EquippedWeapon->GetWeaponState() == EWeaponState::EWS_Equipped) {
 
-		//EquippedWeapon->StartFireTimer();
+		attackDelay = EquippedWeapon->GetFireDelay();
 
 		EquippedWeapon->Fire(EquippedWeapon->hitTarget);
 		if (anim != nullptr) {
 			anim->PlayAttackAnim();
 		}
 	}
+
+	float temp = GetWorld()->GetTimerManager().GetTimerRemaining(attackTimer);
 }
 
 

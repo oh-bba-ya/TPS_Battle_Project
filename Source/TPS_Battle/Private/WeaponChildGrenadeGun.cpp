@@ -22,6 +22,7 @@ void AWeaponChildGrenadeGun::BeginPlay()
 
 	SetWeaponName(EWeaponName::EWN_GrenadeGun);
 
+	SetFireDelay(3.f);
 }
 
 

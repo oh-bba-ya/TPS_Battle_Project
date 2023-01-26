@@ -75,12 +75,18 @@ private:
 	void InputDisableSprint();
 	void InputPickUp();
 	void InputAttack();
+	void InputAttackRelease();
+	void Attack();
 	void InputSwapWeapon();
 
 	int32 WeaponNumber = 0;
 
 	UPROPERTY(EditAnywhere, Category = PlayerWeaponSettings)
 	int32 MaxCountWeapon = 5;
+
+	FTimerHandle attackTimer;
+
+	float attackDelay = 1;
 
 #pragma endregion
 
