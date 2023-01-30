@@ -52,7 +52,7 @@ public:
 		float explosionDamage = 10;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
-		float explosionRange = 400;
+		float explosionRange = 600;
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 		class UParticleSystem* grenadeImpact;
@@ -69,6 +69,8 @@ public:
 	void ExplosionTimer();
 
 	bool OnDisTanceToPlayer();
+
+	void OnDisTanceToEnemy();
 
 	UPROPERTY(EditAnywhere, Category = BulletSettings)
 	class UParticleSystem* Tracer;

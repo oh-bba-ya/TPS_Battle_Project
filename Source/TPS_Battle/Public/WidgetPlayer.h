@@ -21,8 +21,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerSettings|MP", meta = (BindWidget))
 	class UProgressBar* mpBar;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerSettings|HP", meta = (BindWidget))
+		class UTextBlock* Score;
 
+	int32 currentScore = 0;
 
 	void PrintState(float current, float max, bool hp);
+	void AddScore(int32 point);
+
+
 
 };

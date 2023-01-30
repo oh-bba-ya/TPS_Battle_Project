@@ -237,7 +237,14 @@ void ABaseCharacter::Attack()
 
 		EquippedWeapon->Fire(EquippedWeapon->hitTarget);
 		if (anim != nullptr) {
-			anim->PlayAttackAnim();
+			if (EquippedWeapon->GetWeaponName() != EWeaponName::EWN_Pistol) {
+				anim->PlayAttackRifleAnim();
+				anim->isPistol = false;
+			}
+			else {
+				anim->PlayAttackAnim();
+				anim->isPistol = true;
+			}
 		}
 	}
 

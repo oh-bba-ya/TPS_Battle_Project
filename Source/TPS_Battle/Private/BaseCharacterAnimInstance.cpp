@@ -10,6 +10,11 @@ void UBaseCharacterAnimInstance::PlayAttackAnim()
 	Montage_Play(attackPistolAnimMontage);
 }
 
+void UBaseCharacterAnimInstance::PlayAttackRifleAnim()
+{
+	Montage_Play(attackRifleAnimMontage);
+}
+
 void UBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);

@@ -3,6 +3,7 @@
 
 #include "WidgetPlayer.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 void UWidgetPlayer::PrintState(float current, float max, bool hp)
 {
@@ -11,5 +12,13 @@ void UWidgetPlayer::PrintState(float current, float max, bool hp)
 	}
 	else {
 		mpBar->SetPercent(current / max );
+	}
+}
+
+void UWidgetPlayer::AddScore(int32 point)
+{
+	currentScore += point;
+	if (Score) {
+		Score->SetText(FText::AsNumber(currentScore));
 	}
 }

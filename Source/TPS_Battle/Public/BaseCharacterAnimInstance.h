@@ -26,8 +26,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
 		class UAnimMontage* attackPistolAnimMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
+		class UAnimMontage* attackRifleAnimMontage;
 
 	void PlayAttackAnim();
+
+	void PlayAttackRifleAnim();
 
 	// 플레이어 좌우 이동속도
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)

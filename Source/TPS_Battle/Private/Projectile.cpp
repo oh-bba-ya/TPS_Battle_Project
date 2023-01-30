@@ -10,6 +10,7 @@
 #include "BaseCharacter.h"
 #include "BaseEnemyCharcter.h"
 #include "BaseEnemyCharacterFSM.h"
+#include "EngineUtils.h"
 
 
 // Sets default values
@@ -82,8 +83,11 @@ void AProjectile::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	ABaseEnemyCharcter* enemy = Cast<ABaseEnemyCharcter>(OtherActor);
 	
 	if (enemy != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"));
 		enemy->enemyFSM->OnDamageProcess(GetDamage());
+	}
+
+	if (!isGrenadeBullet) {
+		DestoryBullet();
 	}
 	
 }
@@ -103,9 +107,9 @@ void AProjectile::DestoryTimeBullet()
 void AProjectile::Explosion()
 {
 	if (grenadeImpact) {
-		UE_LOG(LogTemp, Warning, TEXT("Explosion"));
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), grenadeImpact, GetActorLocation(), GetActorRotation());;
 		FTimerHandle destoryTime;
+		OnDisTanceToEnemy();
 		if (OnDisTanceToPlayer()) {
 			player->OnHitEvent(explosionDamage);
 			player->OnCameraShake();
@@ -127,5 +131,16 @@ bool AProjectile::OnDisTanceToPlayer()
 		return true;
 	}
 	return false;
+}
+
+void AProjectile::OnDisTanceToEnemy()
+{
+	for (TActorIterator<ABaseEnemyCharcter> it(GetWorld()); it; ++it) {
+		ABaseEnemyCharcter* enemy = *it;
+		float dist = GetDistanceTo(enemy);
+		if (dist <= explosionRange) {
+			enemy->enemyFSM->OnDamageProcess(explosionDamage);
+		}
+	}
 }
 
