@@ -24,6 +24,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerSettings|HP", meta = (BindWidget))
 		class UTextBlock* Score;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerSettings|HP", meta = (BindWidgetAnim),Transient)
+		class UWidgetAnimation* scoreAnim;
+
 	int32 currentScore = 0;
 
 	void PrintState(float current, float max, bool hp);

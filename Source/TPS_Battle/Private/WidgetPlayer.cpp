@@ -20,5 +20,8 @@ void UWidgetPlayer::AddScore(int32 point)
 	currentScore += point;
 	if (Score) {
 		Score->SetText(FText::AsNumber(currentScore));
+		// scoreAnim 애니메이션을 실행한다.
+		PlayAnimation(scoreAnim, 0, 1, EUMGSequencePlayMode::Forward);
+
 	}
 }
