@@ -60,7 +60,7 @@ public:
 	class ABaseEnemyCharcter* me;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
-	float attackRange = 300.0f;
+	float attackRange = 1000.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float attackDelayTime = 2.0f;
@@ -87,5 +87,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* EnemyMuzzleFactory;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* enemyFireSound;	
 };
 

@@ -20,6 +20,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "WidgetPlayer.h"
+#include "Sound/SoundBase.h"
 
 
 // Sets default values for this component's properties
@@ -130,6 +131,7 @@ void UBaseEnemyCharacterFSM::AttackState()
 		currentTime = 0;
 		anim->bAttackPlay = true;		
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EnemyMuzzleFactory, me->muzzleBox->GetComponentTransform());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), enemyFireSound, me->GetActorLocation(), me->GetActorRotation());
 		target->OnHitEvent(20);	
 	}
 
