@@ -11,6 +11,15 @@
 #include <NavigationSystem.h>
 #include "GameFrameWork/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Particles/ParticleSystem.h"
+#include "Engine/World.h"
+#include "Engine/SkeletalMeshSocket.h"
+#include "Components/BoxComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "WidgetPlayer.h"
 
 
 // Sets default values for this component's properties
@@ -41,6 +50,7 @@ void UBaseEnemyCharacterFSM::BeginPlay()
 void UBaseEnemyCharacterFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	UE_LOG(LogTemp, Warning, TEXT("FSM"));
 	switch (mState)
 	{
 		case EEnemyState::Idle:
@@ -131,6 +141,22 @@ void UBaseEnemyCharacterFSM::AttackState()
 		UE_LOG(LogTemp, Warning, TEXT("ATTACK"));
 		currentTime = 0;
 		anim->bAttackPlay = true;		
+
+		//muzzleBox = CreateDefaultSubobject<UBoxComponent>(TEXT("muzzleBox"));
+		//muzzleBox->SetupAttachment(me->pistolGunMeshComp, TEXT("FirePosition"));
+		/*
+		FTransform muzzlePos = Cast<ABaseEnemyCharcter>(GetComponentTransform()->muzzleBox);
+		FTransform muzzlePos = Cast<ABaseEnemyCharcter>(me->muzzleBox);*/
+
+		/*const USkeletalMeshSocket* MuzzleFlashSocket = me->pistolGunMeshComp->GetSocketByName(FName("FirePosition"));
+		FTransform muzzleBox = GetSocketTransform(MuzzleFlashSocket);*/
+
+		//auto muzzlePos = Cast<ABaseEnemyCharcter>(me->pistolGunMeshComp->GetComponentTransform());
+		//auto muzzlePos = me->pistolGunMeshComp->GetComponentTransform();
+		//auto muzzle = me->pistolGunMeshComp->GetSocketByName(FName("FirePosition"));
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EnemyMuzzleFactory, me->muzzleBox->GetComponentTransform());
+		target->OnHitEvent(20);
+		
 	}
 
 	float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
@@ -154,12 +180,13 @@ void UBaseEnemyCharacterFSM::AttackState()
 		//FRotator NewRot = FMath::RInterpTo(StaticMesh2->GetComponentRotation(), PlayerRot, GetWorld()->DeltaTimeSeconds, 2);
 		//FRotator Newrot = (PlayerLoc - StaticMesh2->GetComponentLocation()).Rotation();
 		me->SetActorRotation(PlayerRot);
+		
 	}
 }
 
 void UBaseEnemyCharacterFSM::DamageState()
 {
-	currentTime += GetWorld()->DeltaTimeSeconds;
+	currentTime += GetWorld()->DeltaTimeSeconds;	
 	if (currentTime > damageDelayTime)
 	{
 		mState = EEnemyState::Idle;
@@ -170,30 +197,53 @@ void UBaseEnemyCharacterFSM::DamageState()
 
 void UBaseEnemyCharacterFSM::DieState()
 {
-	FVector P0 = me->GetActorLocation();
-	FVector vt = FVector::DownVector * dieSpeed * GetWorld()->DeltaTimeSeconds;
-	FVector P = P0 + vt;
-	me->SetActorLocation(P);
-	if (P.Z < -100.0f)
+	target->widgetPlayer->AddScore(1);
+	
+	currentTime += GetWorld()->DeltaTimeSeconds;
+	if (currentTime > dieDelayTime)
 	{
 		me->Destroy();
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Die"));		
 	}
+	/*
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, FTimerDelegate::CreateLambda([this]()->void
+	{
+		me->Destroy();
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Die"));
+		target->widgetPlayer->AddScore(1);
+	}), DelayTime, false);
+	*/
+	//me->GetSkeletalMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	//me->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//FVector P0 = me->GetActorLocation();
+	//FVector vt = FVector::UpVector * dieSpeed * GetWorld()->DeltaTimeSeconds;
+	//FVector P = P0 + vt;
+	//me->SetActorLocation(P);
+	//if (P.Z < -50.0f)
+	//{
+	//	me->Destroy();
+	//}
 }
 
-void UBaseEnemyCharacterFSM::OnDamageProcess(int a)
+void UBaseEnemyCharacterFSM::OnDamageProcess(float a)
 {
-	enemyHP -= a;
-	UE_LOG(LogTemp, Warning, TEXT("OnDamage : %d"),enemyHP);
-	if (enemyHP > 0)
+	me->enemyCurHP = me->enemyCurHP - a;
+	UE_LOG(LogTemp, Warning, TEXT("DamagePower : %d"), a);
+	const float randomRot = FMath::FRandRange(1.0f, 180.0f);
+	FRotator Rot = me->GetActorRotation()*randomRot;	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bloodEffect, me->GetActorLocation(), Rot, FVector(0.03));
+	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bloodEffect, me->GetActorLocation(), me->GetActorRotation(), FVector(0.03));
+	//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bloodEffect, me->GetActorLocation(), me->GetActorRotation());
+	if (me->enemyCurHP > 0)
 	{
 		mState = EEnemyState::Damage;
 		ai->StopMovement();
 	}
-	else 
+	else if(me->enemyCurHP <=0)
 	{
-		mState = EEnemyState::Die;
-		//me->GetSkeletalMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		me->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		mState = EEnemyState::Die;		
 	}
 	anim->animState = mState;
 }

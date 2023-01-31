@@ -35,18 +35,22 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
 	EEnemyState mState = EEnemyState::Idle;
-
+			
 	void IdleState();
 	void MoveState();
 	void AttackState();
 	void DamageState();
 	void DieState();	
 
-	void OnDamageProcess(int a);
+	void OnDamageProcess(float a);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
 	float idleDelayTime = 2;
+
 	float currentTime = 0;	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	float dieDelayTime = 5.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
 	class ABaseCharacter* target;
@@ -74,5 +78,18 @@ public:
 
 	FVector randomPos;
 	bool GetRandomPositionInNavMesh(FVector centerLocation, float radius, FVector& dest);
+
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* bloodEffect;
+	//class UParticleSystem* bloodEffect;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
+	//class UBoxComponent* muzzleBox;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* EnemyMuzzleFactory;
+
+	
+
 };
 

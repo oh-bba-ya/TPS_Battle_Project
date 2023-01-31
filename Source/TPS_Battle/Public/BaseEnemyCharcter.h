@@ -36,9 +36,26 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSMComponent)
 	class UBaseEnemyCharacterFSM* enemyFSM;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GunMesh)
-	class USkeletalMeshComponent* pistolMeshComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
+	class USkeletalMeshComponent* pistolGunMeshComp;
 
-private:
-	int32 enemyHP = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UWidgetComponent* hpWidgetComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy State")
+	TSubclassOf<class UUserWidget> BP_WidgetEnemy;
+
+	UPROPERTY()
+	class UWidgetEnemy* widgetEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float enemyMaxHP = 15.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float enemyCurHP = 15.0f;
+
+	UFUNCTION()
+	void MySelfDestory();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
+	class UBoxComponent* muzzleBox;
 };
