@@ -6,5 +6,6 @@
 
 void UWidgetEnemy::PrintState(float current, float max)
 {
+	if (enemyHpBar == nullptr) return; //ÆÄ
 	enemyHpBar->SetPercent(current / max);
 }

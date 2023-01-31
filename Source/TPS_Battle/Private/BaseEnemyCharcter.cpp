@@ -40,8 +40,8 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 	if (tempGunMesh.Succeeded())
 	{
 		pistolGunMeshComp->SetSkeletalMesh(tempGunMesh.Object);
-		pistolGunMeshComp->SetRelativeLocation(FVector(-5, -8, 0));
-		pistolGunMeshComp->SetRelativeRotation(FRotator(90, -90, 80));
+		pistolGunMeshComp->SetRelativeLocation(FVector(-3, -5, 0));
+		pistolGunMeshComp->SetRelativeRotation(FRotator(3, 90, 188));
 	}
 	muzzleBox = CreateDefaultSubobject<UBoxComponent>(TEXT("muzzleBox"));
 	muzzleBox->SetupAttachment(pistolGunMeshComp, TEXT("FirePosition"));
