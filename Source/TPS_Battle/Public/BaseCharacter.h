@@ -92,7 +92,6 @@ private:
 
 	void SetDirectionMovement(float deltaTime);
 
-	class UWidgetPlayer* widgetPlayer;
 
 	class AWeapon* SpawnDefaultWeapon();
 
@@ -113,6 +112,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+	class UWidgetPlayer* widgetPlayer;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class USpringArmComponent* springComp;
