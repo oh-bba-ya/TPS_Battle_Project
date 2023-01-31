@@ -38,7 +38,6 @@ void UBaseEnemyCharacterFSM::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//auto actor = UGameplayStatics::GetActorOfClass(GetWorld(), ABaseCharacter::StaticClass());
 	auto actor = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	target = Cast<ABaseCharacter>(actor);
 	me = Cast<ABaseEnemyCharcter>(GetOwner());
@@ -80,7 +79,6 @@ void UBaseEnemyCharacterFSM::IdleState()
 		currentTime = 0;
 		anim->animState = mState;
 		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
-		//UE_LOG(LogTemp, Warning, TEXT("Idle"));
 	}
 }
 
@@ -88,11 +86,6 @@ void UBaseEnemyCharacterFSM::MoveState()
 {	
 	FVector destination = target->GetActorLocation();
 	FVector dir = destination - me->GetActorLocation();
-	//me->AddMovementInput(dir.GetSafeNormal()*0.5f);
-	/*ABaseEnemyCharcter* enemy = Cast<ABaseEnemyCharcter>(actor);
-	FNavigationInvoker(enemy, 500.0f, 800.0f);*/
-	//ai->MoveToLocation(destination);
-	//UE_LOG(LogTemp, Warning, TEXT("Move1"));
 	auto ns = UNavigationSystemV1::GetNavigationSystem(GetWorld());
 
 	FPathFindingQuery query;
@@ -106,9 +99,7 @@ void UBaseEnemyCharacterFSM::MoveState()
 
 	if (r.Result == ENavigationQueryResult::Success)
 	{
-		//FVector speed = destination * 0.1;
 		ai->MoveToLocation(destination);
-		//UE_LOG(LogTemp, Warning, TEXT("Move2 : go Target"));
 		me->GetCharacterMovement()->MaxWalkSpeed = 300;
 	}
 	else
@@ -118,7 +109,6 @@ void UBaseEnemyCharacterFSM::MoveState()
 		{
 			me->GetCharacterMovement()->MaxWalkSpeed = 150;
 			GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);
-			//UE_LOG(LogTemp, Warning, TEXT("Move3 : go Random Loc"));
 		}
 	}
 
@@ -128,8 +118,7 @@ void UBaseEnemyCharacterFSM::MoveState()
 		mState = EEnemyState::Attack;
 		anim->animState = mState;
 		anim->bAttackPlay = true;
-		currentTime = attackDelayTime;
-		UE_LOG(LogTemp, Warning, TEXT("Move4 : go Attack"));
+		currentTime = 0;
 	}	
 }
 
@@ -138,25 +127,10 @@ void UBaseEnemyCharacterFSM::AttackState()
 	currentTime += GetWorld()->DeltaTimeSeconds;
 	if (currentTime > attackDelayTime)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ATTACK"));
 		currentTime = 0;
 		anim->bAttackPlay = true;		
-
-		//muzzleBox = CreateDefaultSubobject<UBoxComponent>(TEXT("muzzleBox"));
-		//muzzleBox->SetupAttachment(me->pistolGunMeshComp, TEXT("FirePosition"));
-		/*
-		FTransform muzzlePos = Cast<ABaseEnemyCharcter>(GetComponentTransform()->muzzleBox);
-		FTransform muzzlePos = Cast<ABaseEnemyCharcter>(me->muzzleBox);*/
-
-		/*const USkeletalMeshSocket* MuzzleFlashSocket = me->pistolGunMeshComp->GetSocketByName(FName("FirePosition"));
-		FTransform muzzleBox = GetSocketTransform(MuzzleFlashSocket);*/
-
-		//auto muzzlePos = Cast<ABaseEnemyCharcter>(me->pistolGunMeshComp->GetComponentTransform());
-		//auto muzzlePos = me->pistolGunMeshComp->GetComponentTransform();
-		//auto muzzle = me->pistolGunMeshComp->GetSocketByName(FName("FirePosition"));
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EnemyMuzzleFactory, me->muzzleBox->GetComponentTransform());
-		target->OnHitEvent(20);
-		
+		target->OnHitEvent(20);	
 	}
 
 	float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
@@ -165,22 +139,13 @@ void UBaseEnemyCharacterFSM::AttackState()
 	{
 		mState = EEnemyState::Move;
 		anim->animState = mState;		
-		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);		
-		UE_LOG(LogTemp, Warning, TEXT("Go to Move"));
+		GetRandomPositionInNavMesh(me->GetActorLocation(), 500, randomPos);				
 	}
 	else
 	{
-		//FVector destination = target->GetActorLocation();
-		//FVector dir = destination - me->GetActorLocation();
-		//FRotator(dir);
-		//me->SetActorRotation(dir);
-		//me->AddActorWorldRotation(dir);
 		FVector PlayerLoc = GetWorld()->GetFirstPlayerController()->GetCharacter()->GetActorLocation();
 		FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(me->GetActorLocation(), PlayerLoc);
-		//FRotator NewRot = FMath::RInterpTo(StaticMesh2->GetComponentRotation(), PlayerRot, GetWorld()->DeltaTimeSeconds, 2);
-		//FRotator Newrot = (PlayerLoc - StaticMesh2->GetComponentLocation()).Rotation();
-		me->SetActorRotation(PlayerRot);
-		
+		me->SetActorRotation(PlayerRot);	
 	}
 }
 
@@ -196,46 +161,22 @@ void UBaseEnemyCharacterFSM::DamageState()
 }
 
 void UBaseEnemyCharacterFSM::DieState()
-{
-	target->widgetPlayer->AddScore(1);
-	
+{	
 	currentTime += GetWorld()->DeltaTimeSeconds;
 	if (currentTime > dieDelayTime)
 	{
-		me->Destroy();
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Die"));		
-	}
-	/*
-	FTimerHandle DelayHandle;
-	GetWorld()->GetTimerManager().SetTimer(DelayHandle, FTimerDelegate::CreateLambda([this]()->void
-	{
-		me->Destroy();
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Die"));
 		target->widgetPlayer->AddScore(1);
-	}), DelayTime, false);
-	*/
-	//me->GetSkeletalMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
-	//me->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//FVector P0 = me->GetActorLocation();
-	//FVector vt = FVector::UpVector * dieSpeed * GetWorld()->DeltaTimeSeconds;
-	//FVector P = P0 + vt;
-	//me->SetActorLocation(P);
-	//if (P.Z < -50.0f)
-	//{
-	//	me->Destroy();
-	//}
+		me->Destroy();
+	}
 }
 
 void UBaseEnemyCharacterFSM::OnDamageProcess(float a)
 {
 	me->enemyCurHP = me->enemyCurHP - a;
-	UE_LOG(LogTemp, Warning, TEXT("DamagePower : %d"), a);
-	const float randomRot = FMath::FRandRange(1.0f, 180.0f);
-	FRotator Rot = me->GetActorRotation()*randomRot;	
+	const float randomRot = FMath::FRandRange(0.0f, 360.0f);
+	FRotator Rot = me->GetActorRotation() * randomRot*0.001f;		
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bloodEffect, me->GetActorLocation(), Rot, FVector(0.03));
-	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bloodEffect, me->GetActorLocation(), me->GetActorRotation(), FVector(0.03));
-	//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bloodEffect, me->GetActorLocation(), me->GetActorRotation());
+
 	if (me->enemyCurHP > 0)
 	{
 		mState = EEnemyState::Damage;

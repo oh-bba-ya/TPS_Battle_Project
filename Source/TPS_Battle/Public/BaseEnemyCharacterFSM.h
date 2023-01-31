@@ -33,7 +33,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	EEnemyState mState = EEnemyState::Idle;
 			
 	void IdleState();
@@ -44,31 +44,34 @@ public:
 
 	void OnDamageProcess(float a);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float idleDelayTime = 2;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float currentTime = 0;	
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float dieDelayTime = 5.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	class ABaseCharacter* target;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	class ABaseEnemyCharcter* me;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float attackRange = 300.0f;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float attackDelayTime = 2.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	int32 enemyHP = 100;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float damageDelayTime = 2.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	float dieSpeed = 50.0f;
 
 	UPROPERTY()
@@ -81,15 +84,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* bloodEffect;
-	//class UParticleSystem* bloodEffect;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
-	//class UBoxComponent* muzzleBox;
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* EnemyMuzzleFactory;
-
-	
-
 };
 

@@ -25,37 +25,31 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	//class UCapsuleComponent* capsuleComp;
-	//class UStaticMeshComponent* MeshComp;
-	//class USceneComponent* sceneComp;
 
-	//int32 GetEnemyHP();
-	//void SetEnemyHP(int32 hp);
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSMComponent)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = EnemyFSM)
 	class UBaseEnemyCharacterFSM* enemyFSM;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
 	class USkeletalMeshComponent* pistolGunMeshComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
+	class UBoxComponent* muzzleBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyWidget)
 	class UWidgetComponent* hpWidgetComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy State")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyWidget)
 	TSubclassOf<class UUserWidget> BP_WidgetEnemy;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyWidget)
 	class UWidgetEnemy* widgetEnemy;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyHP)
 	float enemyMaxHP = 15.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyHP)
 	float enemyCurHP = 15.0f;
 
 	UFUNCTION()
 	void MySelfDestory();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GunMesh)
-	class UBoxComponent* muzzleBox;
 };

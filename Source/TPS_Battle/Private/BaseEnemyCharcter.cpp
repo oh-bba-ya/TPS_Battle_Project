@@ -18,14 +18,6 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("sceneComp"));
-	//SetRootComponent(sceneComp);
-
-	/*capsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsuleComp"));
-	capsuleComp->SetupAttachment(RootComponent);
-	capsuleComp->SetCapsuleSize(50, 150);
-	capsuleComp->SetRelativeLocation(FVector(0, 0, 0));
-	SetRootComponent(capsuleComp);*/
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/EnemyList/N01/Ch35_nonPBR.Ch35_nonPBR'"));
 	if (tempMesh.Succeeded())
@@ -35,8 +27,6 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 		GetMesh()->SetupAttachment(RootComponent);
 	}
 	enemyFSM = CreateDefaultSubobject<UBaseEnemyCharacterFSM>(TEXT("FSM"));
-	/*meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("meshComp"));
-	meshComp->SetupAttachment(RootComponent);*/
 
 	ConstructorHelpers::FClassFinder<UAnimInstance> tempClass(TEXT("/Script/Engine.AnimBlueprint'/Game/Blueprints/BP_Enemy/ABP_BaseEnemyCharacter.ABP_BaseEnemyCharacter_C'"));
 	if (tempClass.Succeeded())
@@ -55,7 +45,6 @@ ABaseEnemyCharcter::ABaseEnemyCharcter()
 	}
 	muzzleBox = CreateDefaultSubobject<UBoxComponent>(TEXT("muzzleBox"));
 	muzzleBox->SetupAttachment(pistolGunMeshComp, TEXT("FirePosition"));
-
 
 	hpWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("hpWidgetComp"));
 	hpWidgetComp->SetupAttachment(RootComponent);
@@ -89,8 +78,7 @@ void ABaseEnemyCharcter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void ABaseEnemyCharcter::MySelfDestory()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Die"));
-	//target->widgetPlayer->AddScore(1);
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Die"));	
 	Destroy();
 }
 
