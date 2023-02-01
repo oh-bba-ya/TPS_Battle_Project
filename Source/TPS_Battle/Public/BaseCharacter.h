@@ -166,7 +166,7 @@ public:
 	void OnHitEvent(float value = 10);
 
 	
-
+	void Dead();
 
 
 };

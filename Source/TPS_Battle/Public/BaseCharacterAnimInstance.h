@@ -43,5 +43,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
 		bool isPistol = true;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = PlayerAnim)
+		bool isDead = false;
 
 };

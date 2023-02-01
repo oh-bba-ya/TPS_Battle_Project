@@ -14,6 +14,7 @@
 #include "Components/SphereComponent.h"
 #include "..\Public\BaseCharacter.h"
 #include "BaseCharacterAnimInstance.h"
+#include "BattleGameModeBase.h"
 
 
 
@@ -72,6 +73,8 @@ void ABaseCharacter::BeginPlay()
 	anim = Cast<UBaseCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	EquipWeapon(SpawnDefaultWeapon());
+
+	anim->isDead = false;
 	
 }
 
@@ -139,12 +142,27 @@ void ABaseCharacter::OnHitEvent(float value)
 			widgetPlayer->PrintState(basePlayerHP, 100, true);
 		}
 		if (basePlayerHP <= 0) {
-			UE_LOG(LogTemp, Warning, TEXT("Player Die"));
+			Dead();
 		}
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Player Die"));
+		Dead();
 	}
+}
+
+void ABaseCharacter::Dead()
+{
+	anim->isDead = true;
+	UE_LOG(LogTemp, Warning, TEXT("Player Die"));
+	ABattleGameModeBase* gm = Cast<ABattleGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	if (gm != nullptr) {
+		gm->ShowMenu();
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("GM_NUll"));
+	}
+	
 }
 
 #pragma region EnhancedInput 
