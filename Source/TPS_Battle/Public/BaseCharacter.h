@@ -67,6 +67,14 @@ private:
 
 	FVector direction;
 
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UNiagaraComponent* niagaraComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USphereComponent* sphereComp;
+
+	bool bActiveShield = false;
+
 #pragma region Input
 	void InputHorizontal(float value);
 	void InputVertical(float value);
@@ -87,6 +95,9 @@ private:
 	FTimerHandle attackTimer;
 
 	float attackDelay = 1;
+
+	void InputSkill();
+	void InputSkillRelease();
 
 #pragma endregion
 
@@ -167,6 +178,9 @@ public:
 
 	
 	void Dead();
+
+
+	void RemoveSkill();
 
 
 };

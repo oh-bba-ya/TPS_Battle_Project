@@ -15,7 +15,9 @@
 #include "..\Public\BaseCharacter.h"
 #include "BaseCharacterAnimInstance.h"
 #include "BattleGameModeBase.h"
-
+#include "Shield.h"
+#include "NiagaraComponent.h"
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
@@ -52,6 +54,18 @@ ABaseCharacter::ABaseCharacter()
 		}
 	}
 
+	niagaraComp = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComp"));
+
+	niagaraComp->SetupAttachment(RootComponent);
+
+	niagaraComp->SetRelativeScale3D(FVector(3, 3, 3));
+
+	sphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+
+	sphereComp->SetupAttachment(niagaraComp);
+
+	sphereComp->SetSphereRadius(50);
+
 
 }
 
@@ -85,6 +99,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	SetDirectionMovement(DeltaTime);
 
+	RemoveSkill();
+
 }
 
 // Called to bind functionality to input
@@ -106,6 +122,9 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Pickup"), IE_Pressed, this, &ABaseCharacter::InputPickUp);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ABaseCharacter::InputAttack);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Released, this, &ABaseCharacter::InputAttackRelease);
+	
+	PlayerInputComponent->BindAction(TEXT("Skill"), IE_Pressed, this, &ABaseCharacter::InputSkill);
+	PlayerInputComponent->BindAction(TEXT("Skill"), IE_Released, this, &ABaseCharacter::InputSkillRelease);
 	
 	
 	PlayerInputComponent->BindAction(TEXT("SwapWeapon"), IE_Pressed, this, &ABaseCharacter::InputSwapWeapon);
@@ -136,7 +155,7 @@ void ABaseCharacter::OnCameraShake()
 
 void ABaseCharacter::OnHitEvent(float value)
 {
-	if (basePlayerHP > 0) {
+	if (basePlayerHP > 0 && !bActiveShield) {
 		basePlayerHP -= value;
 		if (widgetPlayer != nullptr) {
 			widgetPlayer->PrintState(basePlayerHP, 100, true);
@@ -145,7 +164,13 @@ void ABaseCharacter::OnHitEvent(float value)
 			Dead();
 		}
 	}
-	else {
+	else if (basePlayerHP > 0 && bActiveShield) {
+		basePlayerMP -= value;
+		if (widgetPlayer != nullptr) {
+			widgetPlayer->PrintState(GetPlayerMP(), 100, false);
+		}
+	}
+	else if(basePlayerHP <=0) {
 		Dead();
 	}
 }
@@ -163,6 +188,14 @@ void ABaseCharacter::Dead()
 		UE_LOG(LogTemp, Warning, TEXT("GM_NUll"));
 	}
 	
+}
+
+void ABaseCharacter::RemoveSkill()
+{
+	if (niagaraComp->IsActive() && GetPlayerMP() <= 0) {
+		niagaraComp->DeactivateImmediate();
+		bActiveShield = false;
+	}
 }
 
 #pragma region EnhancedInput 
@@ -286,6 +319,25 @@ void ABaseCharacter::InputSwapWeapon()
 	}
 	WeaponNumber += 1;
 
+}
+
+void ABaseCharacter::InputSkill()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Active Skill"));
+	if (!niagaraComp->IsActive() && GetPlayerMP()>0) {
+		niagaraComp->ActivateSystem();
+		bActiveShield = true;
+	}
+	
+}
+
+void ABaseCharacter::InputSkillRelease()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Deactive Skill"));
+	if (niagaraComp->IsActive()) {
+		niagaraComp->DeactivateImmediate();
+		bActiveShield = false;
+	}
 }
 
 void ABaseCharacter::SetDirectionMovement(float deltaTime)
