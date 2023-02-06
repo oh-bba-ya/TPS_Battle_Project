@@ -32,8 +32,21 @@ public:
 	UPROPERTY(EditAnywhere, Category = FireBallSettings)
 		class UProjectileMovementComponent* movementComp;
 
+	UPROPERTY(EditAnywhere, Category = BulletSettings)
+		class UParticleSystem* ExplosionImpact;
+
 
 	UFUNCTION()
 		void OnFireBallOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+
+	class ABaseCharacter* player;
+
+	UPROPERTY()
+		int32 ExplosionRange = 600;
+
+	UPROPERTY()
+		int32 Damage = 30;
+
+	void Splash();
 };

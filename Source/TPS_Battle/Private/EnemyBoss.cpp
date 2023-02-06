@@ -53,7 +53,11 @@ void AEnemyBoss::FireBall()
 {
 	if (fireBallFactory) {
 		FVector tempLoc = GetActorLocation() + GetActorForwardVector() * 1;
-		GetWorld()->SpawnActor<AActorFireBall>(fireBallFactory, tempLoc, GetActorRotation());
+		FTransform t = GetMesh()->GetSocketTransform(TEXT("FireBallSocket"));
+		FVector temp = (player->GetActorLocation() - t.GetLocation());
+		temp.Normalize();
+		FRotator r = temp.Rotation();
+		GetWorld()->SpawnActor<AActorFireBall>(fireBallFactory, t.GetLocation(), r);
 	}
 
 }

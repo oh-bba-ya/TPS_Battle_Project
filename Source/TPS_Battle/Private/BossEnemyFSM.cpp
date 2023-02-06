@@ -69,16 +69,18 @@ void UBossEnemyFSM::IdleState()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Idle"));
 	if (GetDistanceToTarget(MoveRange)) {
+		anim->animState = EBossState::MOVE;
 		bossState = EBossState::MOVE;
 	}
 	else {
+		anim->animState = EBossState::ATTACK;
 		bossState = EBossState::ATTACK;
 	}
 }
 
 void UBossEnemyFSM::MoveState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Boss Move"));
+
 	me->LookPlayer(GetWorld()->GetDeltaSeconds(), false);
 	FVector dir = me->GetActorForwardVector();
 	me->AddMovementInput(dir.GetSafeNormal());
