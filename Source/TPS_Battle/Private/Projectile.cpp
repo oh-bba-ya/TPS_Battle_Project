@@ -11,6 +11,7 @@
 #include "BaseEnemyCharcter.h"
 #include "BaseEnemyCharacterFSM.h"
 #include "EngineUtils.h"
+#include "EnemyBoss.h"
 
 
 // Sets default values
@@ -88,6 +89,12 @@ void AProjectile::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 
 	if (!isGrenadeBullet) {
 		DestoryBullet();
+	}
+
+	AEnemyBoss* boss = Cast<AEnemyBoss>(OtherActor);
+
+	if (boss != nullptr) {
+		boss->OnDamageEvnet(GetDamage());
 	}
 	
 }

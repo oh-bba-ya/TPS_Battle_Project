@@ -86,6 +86,7 @@ private:
 	void InputAttackRelease();
 	void Attack();
 	void InputSwapWeapon();
+	void InputPause();
 
 	int32 WeaponNumber = 0;
 

@@ -18,7 +18,27 @@ public:
 	UPROPERTY(EditAnywhere, Category = GameModeSettings)
 		TSubclassOf<class UWidgetGame> menuWidget;
 
+	UPROPERTY(EditAnywhere, Category = GameModeSettings)
+		TSubclassOf<class UWidgetClear> clearWidget;
+
 	class UWidgetGame* menu_UI;
 
-	void ShowMenu();
+	class UWidgetClear* clear_UI;
+
+	void ShowMenu(bool isClear = false);
+
+	void ShowClear();
+
+	UPROPERTY(EditAnywhere, Category = GameModeSettings)
+		TSubclassOf<class UWidgetPause> pauseWidget;
+
+	class UWidgetPause* pause_UI;
+
+	bool isPause = false;
+
+	void ShowPause();
+
+
+
+
 };

@@ -8,6 +8,7 @@
 #include "Math/Vector.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BossEnemyAnim.h"
+#include "BattleGameModeBase.h"
 
 // Sets default values for this component's properties
 UBossEnemyFSM::UBossEnemyFSM()
@@ -54,9 +55,6 @@ void UBossEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		case EBossState::ATTACK:
 			AttackState();
 			break;
-		case EBossState::DAMAGE:
-			DamageState();
-			break;
 		case EBossState::DIE:
 			DieState();
 			break;
@@ -67,14 +65,9 @@ void UBossEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UBossEnemyFSM::IdleState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Idle"));
 	if (GetDistanceToTarget(MoveRange)) {
 		anim->animState = EBossState::MOVE;
 		bossState = EBossState::MOVE;
-	}
-	else {
-		anim->animState = EBossState::ATTACK;
-		bossState = EBossState::ATTACK;
 	}
 }
 
@@ -110,12 +103,11 @@ void UBossEnemyFSM::AttackState()
 	}
 }
 
-void UBossEnemyFSM::DamageState()
-{
-}
-
 void UBossEnemyFSM::DieState()
 {
+	anim->isDead = true;
+	bossState = EBossState::DIE;
+
 }
 
 bool UBossEnemyFSM::GetDistanceToTarget(float length)

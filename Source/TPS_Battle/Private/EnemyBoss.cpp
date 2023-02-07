@@ -8,7 +8,7 @@
 #include "BaseCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "BattleGameModeBase.h"
 
 // Sets default values
 AEnemyBoss::AEnemyBoss()
@@ -33,6 +33,7 @@ void AEnemyBoss::BeginPlay()
 {
 	Super::BeginPlay();
 	player = Cast<ABaseCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	gm = Cast<ABattleGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
 // Called every frame
@@ -76,5 +77,29 @@ void AEnemyBoss::LookPlayer(float deltaTime, bool p)
 			SetActorRotation(FRotator(0,LookAtOpposite.Yaw,0));
 		}
 	}
+}
+
+void AEnemyBoss::OnDamageEvnet(int32 damage)
+{
+	if (BossHealth > 0) {
+		BossHealth -= damage;
+		if (BossHealth <= 0) {
+			fsm->DieState();
+			
+
+			if (gm != nullptr) {
+				gm->ShowClear();
+			}
+		}
+	}
+	else {
+		fsm->DieState();
+		
+		if (gm != nullptr) {
+			gm->ShowClear();
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("BOSS HP : %d"), BossHealth);
 }
 

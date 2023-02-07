@@ -19,5 +19,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AnimProperty)
 		EBossState animState;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AnimProperty)
+	bool isDead = false;
+
 	
 };

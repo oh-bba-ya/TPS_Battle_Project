@@ -11,7 +11,6 @@ enum class EBossState : uint8 {
 	IDLE,
 	MOVE,
 	ATTACK,
-	DAMAGE,
 	DIE,
 };
 
@@ -40,8 +39,6 @@ public:
 	void MoveState();
 
 	void AttackState();
-
-	void DamageState();
 
 	void DieState();
 

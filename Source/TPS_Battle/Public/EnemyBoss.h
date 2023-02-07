@@ -43,6 +43,12 @@ public:
 
 	void LookPlayer(float deltaTime, bool p = true);
 
+	UFUNCTION()
+	void OnDamageEvnet(int32 damage);
+
+	int32 BossHealth = 100;
+
+	class ABattleGameModeBase* gm;
 
 
 };

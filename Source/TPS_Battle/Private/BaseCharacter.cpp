@@ -89,17 +89,25 @@ void ABaseCharacter::BeginPlay()
 	EquipWeapon(SpawnDefaultWeapon());
 
 	anim->isDead = false;
-	
+
 }
+
+
 
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (anim->isDead) {
+		return;
+	}
+
 	SetDirectionMovement(DeltaTime);
 
 	RemoveSkill();
+
+
 
 }
 
@@ -128,6 +136,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	
 	
 	PlayerInputComponent->BindAction(TEXT("SwapWeapon"), IE_Pressed, this, &ABaseCharacter::InputSwapWeapon);
+	
+	PlayerInputComponent->BindAction(TEXT("Pause"), IE_Pressed, this, &ABaseCharacter::InputPause);
 
 
 	/*
@@ -178,14 +188,10 @@ void ABaseCharacter::OnHitEvent(float value)
 void ABaseCharacter::Dead()
 {
 	anim->isDead = true;
-	UE_LOG(LogTemp, Warning, TEXT("Player Die"));
 	ABattleGameModeBase* gm = Cast<ABattleGameModeBase>(GetWorld()->GetAuthGameMode());
 
 	if (gm != nullptr) {
 		gm->ShowMenu();
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("GM_NUll"));
 	}
 	
 }
@@ -248,13 +254,14 @@ void ABaseCharacter::InputVertical(float value)
 
 void ABaseCharacter::InputJump()
 {
-	Jump();
+	if (!anim->isDead) {
+		Jump();
+	}
 }
 
 void ABaseCharacter::InputEnableSprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed = sprintSpeed;
-
 }
 void ABaseCharacter::InputDisableSprint()
 {
@@ -272,7 +279,9 @@ void ABaseCharacter::InputPickUp()
 void ABaseCharacter::InputAttack()
 {
 	GetWorld()->GetTimerManager().SetTimer(attackTimer, this, &ABaseCharacter::Attack, attackDelay, true);
-	Attack();
+	if (!anim->isDead) {
+		Attack();
+	}
 }
 
 void ABaseCharacter::InputAttackRelease()
@@ -306,8 +315,9 @@ void ABaseCharacter::Attack()
 
 void ABaseCharacter::InputSwapWeapon()
 {
+
 	WeaponNumber = WeaponNumber % GetMaxCountweapon();
-	if (!wArray.IsEmpty()) {
+	if (!wArray.IsEmpty() && !anim->isDead) {
 		if (wArray.IsValidIndex(WeaponNumber) && wArray[WeaponNumber] != nullptr) {
 			EWeaponState curState = wArray[WeaponNumber]->GetWeaponState();
 			if (curState == EWeaponState::EWS_PickUpped) {
@@ -321,10 +331,20 @@ void ABaseCharacter::InputSwapWeapon()
 
 }
 
+void ABaseCharacter::InputPause()
+{
+
+	ABattleGameModeBase* gm = Cast<ABattleGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	if (gm != nullptr) {
+		gm->ShowPause();
+		gm->isPause = !gm->isPause;
+	}
+}
+
 void ABaseCharacter::InputSkill()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Active Skill"));
-	if (!niagaraComp->IsActive() && GetPlayerMP()>0) {
+	if (!niagaraComp->IsActive() && GetPlayerMP()>0 && !anim->isDead) {
 		niagaraComp->ActivateSystem();
 		bActiveShield = true;
 	}
@@ -333,7 +353,6 @@ void ABaseCharacter::InputSkill()
 
 void ABaseCharacter::InputSkillRelease()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Deactive Skill"));
 	if (niagaraComp->IsActive()) {
 		niagaraComp->DeactivateImmediate();
 		bActiveShield = false;
