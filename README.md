@@ -36,12 +36,25 @@
   
 5. 작업물
   - 박일석
-    = 적 : 적FSM(이동, 공격), 적체력바   
-      <img src="https://user-images.githubusercontent.com/109566866/218399378-453ae74e-1493-4690-b509-430facdf5254.png">
+    = 적 : 적FSM(이동, 공격), 적체력바, 
+    <img src="    <img src="https://user-images.githubusercontent.com/109566866/218399378-453ae74e-1493-4690-b509-430facdf5254.png">
+">
     
-    = UI : 오프닝, 시작메뉴, 브릿지 화면, 크레디트    
+    = UI : 오프닝, 시작메뉴, 브릿지 화면, 퀘스트 화면, 크레디트    
+      + 시작메뉴
+    <img src="https://user-images.githubusercontent.com/109566866/218399378-453ae74e-1493-4690-b509-430facdf5254.png">
+      + 브릿지화면
+    <img src="https://user-images.githubusercontent.com/109566866/218399371-7549bc6b-7c50-46f1-ac80-08962a315f0e.PNG">
+      + 퀘스트 화면
+    <img src="https://user-images.githubusercontent.com/109566866/218399384-825854e0-f723-4bfb-aa02-f05a536768d0.PNG">
+      + 크레디트화면
+    <img src="https://user-images.githubusercontent.com/109566866/218399382-5fd88da2-b7c6-4bb3-8f30-81ef62ae7f7e.PNG">    
     
     = 환경 : 바위장애물(키블록 해제시 사라짐), 포이즌워터(도트데미지)    
+      + 바위장애물 키블록
+    <img src="https://user-images.githubusercontent.com/109566866/218399389-cb72e500-954f-47bf-814d-831f3ab35e43.PNG">
+      + 포이즌워터
+    <img src="https://user-images.githubusercontent.com/109566866/218399391-7b97461c-88a3-4a41-b620-e5dce515ddaf.PNG">
     
     = 플레이영상     
     
