@@ -45,4 +45,5 @@
     = 플레이영상     
     
       <embed src="https://youtu.be/DJl2eSy9iRE">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/DJl2eSy9iRE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
   
