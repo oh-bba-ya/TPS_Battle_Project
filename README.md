@@ -36,7 +36,8 @@
   
 5. 작업물
   - 박일석
-    = 적 : 적FSM(이동, 공격), 적체력바     
+    = 적 : 적FSM(이동, 공격), 적체력바   
+      <img src="https://user-images.githubusercontent.com/109566866/218399378-453ae74e-1493-4690-b509-430facdf5254.png">
     
     = UI : 오프닝, 시작메뉴, 브릿지 화면, 크레디트    
     
