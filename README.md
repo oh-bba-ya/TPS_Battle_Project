@@ -37,8 +37,7 @@
 5. 작업물
   - 박일석
     = 적 : 적FSM(이동, 공격), 적체력바, 
-    <img src="    <img src="https://user-images.githubusercontent.com/109566866/218399378-453ae74e-1493-4690-b509-430facdf5254.png">
-">
+    <img src="https://user-images.githubusercontent.com/109566866/218399386-5a4e4c78-fd61-42ba-93cb-30395cd91651.PNG">
     
     = UI : 오프닝, 시작메뉴, 브릿지 화면, 퀘스트 화면, 크레디트    
       + 시작메뉴
